@@ -16,7 +16,7 @@ var proxyTable = config.dev.proxyTable
 
 var app = express()
 
-var router = express.Router();
+/*var router = express.Router();
 
 router.post('/isPing', function(req, res) {
   console.log(req);
@@ -27,7 +27,7 @@ router.post('/isPing', function(req, res) {
   res.end();
 });
 
-app.use('/', router);
+app.use('/', router);*/
 
 var compiler = webpack(webpackConfig)
 
