@@ -30,8 +30,15 @@
         padding: 0 60px;
         .el-table .cell {
             text-align: center;
+
+            // 去除表格内单选框的动画效果，有bug导致表格边框闪烁
+            .el-radio__inner::after{
+				transition: transform 0s;
+		    }
         }
+
     }
+    
 }
 </style>
 <template>
@@ -79,7 +86,7 @@
                 <el-table-column label="Hadoop">
                     <el-table-column label="NameNode">
                     	<template scope="scope">
-                        	<el-radio></el-radio>
+                        	<el-radio class="radio" v-model="hadoopNameNode" :label="scope.$index">&nbsp;</el-radio>
                         </template>
                     </el-table-column>
                     <el-table-column label="DataNode">
@@ -91,7 +98,7 @@
                 <el-table-column label="Spark">
                     <el-table-column label="Master">
                     	<template scope="scope">
-                        	<el-radio></el-radio>
+                        	<el-radio class="radio" v-model="sparkMaster" :label="scope.$index">&nbsp;</el-radio>
                         </template>
                     </el-table-column>
                     <el-table-column label="Worker">
@@ -103,7 +110,7 @@
                 <el-table-column label="NPBase">
                     <el-table-column label="HMaster">
                     	<template scope="scope">
-                        	<el-radio></el-radio>
+                        	<el-radio class="radio" v-model="sparkHMaster" :label="scope.$index">&nbsp;</el-radio>
                         </template>
                     </el-table-column>
                     <el-table-column label="HRegion">
@@ -138,13 +145,16 @@ export default {
                 name: 'xiaoxin',
                 installType: 0,
                 mainServer: '',
-                nextDisable: true,
+                nextDisable: false,
                 showmainPan: true,
                 serverList: this.$root.serverList || [],
-                azkaban: 0,
+                azkaban: 0,//单选
+                hadoopNameNode: 0,//单选
+                sparkMaster: 0,//单选
+                sparkHMaster: 0,//单选
                 tableData: [{
                         IP: '122.122.121.1',
-                        jdk: true,
+                        jdk: false,
                         zookeeper: true,
                         kafka: true,
                         azkaban: true
@@ -175,7 +185,8 @@ export default {
                 this.showmainPan = value === 1 ? false : true;
             },
             next() {
-
+            	this.$router.replace('/installComponents');
+            	console.log(this.tableData + '-------' + this.azkaban);
             }
         },
         watch: {
