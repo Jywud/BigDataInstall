@@ -13,7 +13,7 @@
 		width: 100%;
 		height: 100%;
 		.selectPan{
-			width: 720px;
+			width: 730px;
 			margin: 100px 0 50px 110px;
 			.selfTitle{
 				margin-top: 4px;

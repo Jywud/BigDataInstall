@@ -19,6 +19,7 @@
 				padding: 10px 38px;
 				margin-bottom: 10px; 
 				margin-right: 10px; 
+				text-align: center;
 				.content-title{
 					font-weight: 800;
 					color: #222;
@@ -26,14 +27,19 @@
 				.comp-progress{
 					margin-bottom: 20px;
 				}
-				.btn-log{
-					margin-left: 36px;
-				}
 			}
 			.el-progress__text{
 				// color: #fff;
 			}
 		}
+		.btn-next {
+	        position: absolute;
+	        left: 50%;
+	        bottom: 60px;
+	        background-color: #2A4DB0;
+	        padding: 10px 40px;
+	        margin-left: -62px;
+	    }
 	}
 </style>
 
@@ -46,18 +52,9 @@
 				<el-progress class="comp-progress" type="circle" :status="item.status" :percentage="item.percentage"></el-progress>		
 				<button class="btn btn-warning btn-log">日志</button>
 			</div>
-			<!-- <div class="content">	
-				<p class="text-center content-title">azkaban</p>	
-				<el-progress class="comp-progress" type="circle" :percentage="100" status="success"></el-progress>	
-				<button class="btn btn-warning btn-log">日志</button>		
-			</div>
-			<div class="content">
-				<p class="text-center content-title">azkaban</p>	
-				<el-progress class="comp-progress" type="circle" :percentage="100" status="exception"></el-progress>
-				<button class="btn btn-warning btn-log">日志</button>					
-			</div> -->
 			
 		</div>
+		<button class="btn btn-primary btn-next" :disabled="nextDisable" @click="next">启动</button>
 	</div>
 </template>
 
@@ -65,10 +62,11 @@
 	export default{
 		data (){
 			return {
+				nextDisable: true,
 				comList: [
 					{
 						name: 'JDK',
-						percentage: 35,
+						percentage: 65,
 						status: ''
 					},{
 						name: 'azkaban',
@@ -78,8 +76,29 @@
 						name: 'sparkMaster',
 						percentage: 100,
 						status: 'exception'
+					},{
+						name: 'sparkMaster',
+						percentage: 80,
+						status: ''
+					},{
+						name: 'sparkMaster',
+						percentage: 19,
+						status: ''
+					},{
+						name: 'sparkMaster',
+						percentage: 10,
+						status: ''
+					},{
+						name: 'success',
+						percentage: 50,
+						status: ''
 					}
 				]
+			}
+		},
+		methods: {
+			next (){
+
 			}
 		}
 	}
