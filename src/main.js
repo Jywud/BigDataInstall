@@ -4,17 +4,20 @@ import App from './App'
 
 // import store from './store'
 import 'bootstrap/dist/css/bootstrap.css'
+
+// import '../static/css/base.css'
+
 // vue组件
-import ElementUI from 'element-ui'
-import 'element-ui/lib/theme-default/index.css'
+// import ElementUI from 'element-ui'
+// import 'element-ui/lib/theme-default/index.css'
 
-import $ from 'jquery'
-import router from './router.js'
+// import $ from 'jquery'
+import commonCMP from './components/common/commonCMP.js'
+import router from './router.js';
 
-Vue.use(ElementUI);
 Vue.use(VueResource);
 
-
+commonCMP.addElementUI();
 
 //请求拦截器
 /*Vue.http.interceptors.push(function(request, next) {		
