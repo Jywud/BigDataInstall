@@ -17,14 +17,21 @@
     }
     .install-type-pan {
         margin: 60px auto;
-        width: 190px;
+        width: 200px;
+        text-align: center;
     }
     .choose-main-pan {
-        width: 300px;
-        margin: 0 auto;
-        .el-form-item__label {
+        width: 330px;
+        margin: 0 auto 40px;
+        .showmainPan-title{
+            margin-top: 5px;
+        }
+        /* .el-form-item__label {
             color: #fff;
         }
+        .el-select .el-input .el-input__icon{
+                transition: transform 0s;
+            } */
     }
     .table-pan {
         padding: 0 60px;
@@ -35,6 +42,7 @@
             .el-radio__inner::after{
 				transition: transform 0s;
 		    }
+
         }
 
     }
@@ -51,13 +59,23 @@
             </el-radio-group>
         </div>
         <div class="choose-main-pan" v-show="showmainPan">
-            <el-form ref="form" label-width="120px">
+            <div class="row">
+                <div class="col-sm-4">
+                    <label class="showmainPan-title">选择主节点：</label>
+                </div>
+                <div class="col-sm-8">
+                    <select class="form-control" v-model="mainServer">
+                      <option v-for="server in serverList" :value="server.ip">{{server.ip}}</option>              
+                    </select>
+                </div>
+            </div>        
+            <!-- <el-form ref="form">
                 <el-form-item label="选择主节点：">
                     <el-select v-model="mainServer">
                         <el-option v-for="server in serverList" :label="server.ip" :value="server.ip"></el-option>
                     </el-select>
                 </el-form-item>
-            </el-form>
+            </el-form> -->
         </div>
         <div class="table-pan">
             <el-table :data="tableData" stripe border style="width: 100%;">

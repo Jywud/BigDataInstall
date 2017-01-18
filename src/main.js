@@ -3,7 +3,7 @@ import VueResource from 'vue-resource'
 import App from './App'
 
 // import store from './store'
-import 'bootstrap/dist/css/bootstrap.css'
+// import 'bootstrap/dist/css/bootstrap.css'
 
 // import '../static/css/base.css'
 
@@ -12,8 +12,10 @@ import 'bootstrap/dist/css/bootstrap.css'
 // import 'element-ui/lib/theme-default/index.css'
 
 // import $ from 'jquery'
+
+//加载第三方组件
 import commonCMP from './components/common/commonCMP.js'
-import router from './router.js';
+import router from './router.js'
 
 Vue.use(VueResource);
 

@@ -4,6 +4,8 @@
         <h1 class="word title mt200">大数据安装管理平台</h1>
         <h4 class="word">Big data installation management platform</h4>
         <!-- <router-link to="/addServers" class="btn btn-primary btn-install" replace>开始安装</router-link> -->
+        <router-view></router-view>
+
         <button class="btn btn-primary btn-install" @click="install">开始安装</button>
     </div>
 </template>

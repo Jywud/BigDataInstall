@@ -1,5 +1,8 @@
 <template>
-<div>啦啦啦啦lalalal{{name | myFilter}}</div>
+<div class="test">
+	<div>啦啦啦啦lalalal{{name}}</div>
+</div>
+
 	
 </template>
 <script>
