@@ -14,7 +14,7 @@ import App from './App'
 // import $ from 'jquery'
 
 //加载第三方组件
-import commonCMP from './components/common/commonCMP.js'
+import commonCMP from 'common/js/commonCMP.js'
 import router from './router.js'
 
 Vue.use(VueResource);

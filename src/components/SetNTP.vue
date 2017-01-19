@@ -117,7 +117,7 @@
 	</div>
 </template>
 <script>
-	import common from '../common.js';
+	import util from 'common/js/util.js';
 	export default{
 		beforeMount () {
 		    this.NTPIp = this.$root.NTPIp || '';
@@ -148,7 +148,7 @@
 		},
 		methods: {
 			setSelfNTP (){
-				if(!common.IP.test(this.selfModul)) {
+				if(!util.IP.test(this.selfModul)) {
 					this.showErrorTip = true;
 					return;
 				}

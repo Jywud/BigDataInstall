@@ -282,7 +282,8 @@
 }
 </style>
 <script>
-import common from '../common.js';
+import util from 'common/js/util.js';
+import { MessageBox } from 'element-ui';
 var currentEditIndex = 0;
 export default {
     created: function() {
@@ -310,7 +311,7 @@ export default {
 
             this.nextDisable = this.serverList.length > 0 ? false : true;
 
-            // common.saveServers(this.serverList);
+            // util.saveServers(this.serverList);
         }
     },
     methods: {
@@ -354,7 +355,7 @@ export default {
         //检查输入框内容
         checkRight(type, txt) {
             if (type === 'ip') {
-                if (!common.IP.test(this.inputIp)) {
+                if (!util.IP.test(this.inputIp)) {
                     this.ipError = true;
                     return;
                 }
@@ -392,7 +393,7 @@ export default {
         },
         deleteServer(index) {
             var self = this;
-            this.$msgbox({
+            MessageBox({
                 title: '提示',
                 message: '确定删除？',
                 showCancelButton: true,
