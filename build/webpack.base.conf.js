@@ -1,4 +1,5 @@
 var path = require('path')
+var webpack = require('webpack')
 var config = require('../config')
 var utils = require('./utils')
 var projectRoot = path.resolve(__dirname, '../')
@@ -26,11 +27,22 @@ module.exports = {
             'vue$': 'vue/dist/vue.common.js',
             'src': path.resolve(__dirname, '../src'),
             'common': path.resolve(__dirname, '../src/common'),
-            'components': path.resolve(__dirname, '../src/components')
+            'components': path.resolve(__dirname, '../src/components'),
+            'jquery': path.resolve(__dirname, '../static/lib/jquery-2.0.0.min'),
+            'lib': path.resolve(__dirname, '../static/lib')
                 // 'jquery': path.resolve(__dirname, '../node_modules/jquery/src/jquery')
 
         }
     },
+    // 增加一个plugins
+    /*plugins: [
+        new webpack.ProvidePlugin({
+            $: 'jquery',
+            jQuery: 'jquery',
+            'windows.jQuery': 'jquery'
+
+        })
+    ],*/
     resolveLoader: {
         fallback: [path.join(__dirname, '../node_modules')]
     },
@@ -73,5 +85,5 @@ module.exports = {
             })
         ]
     },
-    postcss: [ require('autoprefixer')() ]
+    postcss: [require('autoprefixer')()]
 }

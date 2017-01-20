@@ -3,15 +3,11 @@ import VueResource from 'vue-resource'
 import App from './App'
 
 // import store from './store'
-// import 'bootstrap/dist/css/bootstrap.css'
 
-// import '../static/css/base.css'
-
-// vue组件
-// import ElementUI from 'element-ui'
-// import 'element-ui/lib/theme-default/index.css'
-
-// import $ from 'jquery'
+//暂时不用jquery
+/*import $ from 'jquery'
+import layer from 'lib/layer/layer.js'
+import 'lib/layer/skin/default/layer.css'*/
 
 //加载第三方组件
 import commonCMP from 'common/js/commonCMP.js'
