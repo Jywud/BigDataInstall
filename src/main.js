@@ -5,9 +5,10 @@ import App from './App'
 // import store from './store'
 
 //暂时不用jquery
-/*import $ from 'jquery'
-import layer from 'lib/layer/layer.js'
-import 'lib/layer/skin/default/layer.css'*/
+// import $ from 'jquery'
+// import 'lib/bootstrap/bootstrap.min' 
+// import 'lib/layer/layer.js'
+// import 'lib/layer/skin/default/layer.css'
 
 //加载第三方组件
 import commonCMP from 'common/js/commonCMP.js'
