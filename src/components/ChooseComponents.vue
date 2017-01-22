@@ -158,6 +158,7 @@ export default {
     /*components: {
     	'test': Test
     },*/
+    name: 'chooseComponents',
     data() {
             return {
                 name: 'xiaoxin',

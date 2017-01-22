@@ -286,6 +286,7 @@ import util from 'common/js/util.js';
 import { MessageBox } from 'element-ui';
 var currentEditIndex = 0;
 export default {
+    name: 'addServers',
     created: function() {
         this.nextDisable = this.$root.serverList && this.$root.serverList.length > 0 ? false : true;
     },

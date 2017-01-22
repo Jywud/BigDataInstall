@@ -60,6 +60,7 @@
 
 <script>
 	export default{
+		name: 'installComponents',
 		data (){
 			return {
 				nextDisable: true,

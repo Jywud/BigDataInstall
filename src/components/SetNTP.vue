@@ -119,6 +119,7 @@
 <script>
 	import util from 'common/js/util.js';
 	export default{
+		name: 'setNTP',
 		beforeMount () {
 		    this.NTPIp = this.$root.NTPIp || '';
 		    if(this.NTPIp) {
