@@ -417,7 +417,7 @@ export default {
             this.isShowBox = false;
         },
         next() {
-            this.$router.replace('/setNTP');
+            this.$router.replace('/configNoPwd');
         }
 
     }

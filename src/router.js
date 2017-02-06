@@ -2,6 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Login from 'components/Login.vue'
 import AddServers from 'components/AddServers.vue'
+import ConfigNoPwd from 'components/ConfigNoPwd.vue'
 import SetNTP from 'components/SetNTP.vue'
 import ChooseComponents from 'components/ChooseComponents.vue'
 import InstallComponents from 'components/InstallComponents.vue'
@@ -18,6 +19,7 @@ const routes = [
         }]*/
     },
     { path: '/addServers', component: AddServers },
+    { path: '/configNoPwd', component: ConfigNoPwd },
     { path: '/setNTP', component: SetNTP },
     { path: '/chooseComponents', component: ChooseComponents },
     { path: '/installComponents', component: InstallComponents }

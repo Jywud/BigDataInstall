@@ -120,7 +120,7 @@
 	import util from 'common/js/util.js';
 	export default{
 		name: 'setNTP',
-		beforeMount () {
+		mounted () {
 		    this.NTPIp = this.$root.NTPIp || '';
 		    if(this.NTPIp) {
 		    	this.nextDisable = false;
