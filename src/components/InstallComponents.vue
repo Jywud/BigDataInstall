@@ -50,20 +50,28 @@
 			<div class="content" v-for="(item, index) in comList">	
 				<p class="text-center content-title">{{item.name}}</p>	
 				<el-progress class="comp-progress" type="circle" :status="item.status" :percentage="item.percentage"></el-progress>		
-				<button class="btn btn-warning btn-log">日志</button>
+				<button class="btn btn-warning btn-log" @click="showLog(item)">日志</button>
 			</div>
 			
 		</div>
 		<button class="btn btn-primary btn-next" :disabled="nextDisable" @click="next">启动</button>
+		<el-dialog title="日志信息" v-model="dialogFormVisible">
+		    <div style="height:400px;overflow-y:auto;padding:10px">
+		    	{{logContent}}
+		    </div>
+		</el-dialog>
 	</div>
 </template>
 
 <script>
+	import { MessageBox } from 'element-ui';
 	export default{
 		name: 'installComponents',
 		data (){
 			return {
+				dialogFormVisible: false, //是否展示日志框
 				nextDisable: true,
+				logContent: '', //日志信息
 				comList: [
 					{
 						name: 'JDK',
@@ -98,6 +106,10 @@
 			}
 		},
 		methods: {
+			showLog (item) {
+				this.logContent = item.name;
+				this.dialogFormVisible = true;
+			},
 			next (){
 
 			}

@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import {Button, Message, MessageBox, Radio, RadioGroup, Checkbox, Select, Option, Table, TableColumn, Progress, Form, FormItem } from 'element-ui'
+import {Button, Message, MessageBox, Radio, RadioGroup, Checkbox, Select, Option, Table, TableColumn, Progress, Form, FormItem, Dialog } from 'element-ui'
 
 export default{
 	addElementUI: function() {
@@ -16,5 +16,6 @@ export default{
 		Vue.component(Progress.name, Progress);
 		Vue.component(Form.name, Form);
 		Vue.component(FormItem.name, FormItem);
+		Vue.component(Dialog.name, Dialog);
 	}
 }
