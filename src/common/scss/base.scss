@@ -16,9 +16,6 @@ ul{
 .box-title{
 	color: #fff;
 }
-/* .el-step__title.is-process{
-	color: #ddd;
-} */
 .step-box{
 	text-align: center;
 	margin-top: 20px;
@@ -30,4 +27,9 @@ ul{
 
 .mt200{
 	margin-top: 200px;
+}
+
+/* 覆盖原始组件 */
+.el-step__title.is-process{
+	color: #ddd;
 }

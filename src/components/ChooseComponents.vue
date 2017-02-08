@@ -51,7 +51,8 @@
 </style>
 <template>
     <div id="chooseComponents">
-        <h2 class="text-center box-title">选择安装组件</h2>
+        <steps :active="3"></steps>
+        <!-- <h2 class="text-center box-title">选择安装组件</h2> -->
         <div class="install-type-pan">
             <el-radio-group v-model="installType" @change="chooseType">
                 <el-radio class="default-color" :label="0">默认安装</el-radio>
@@ -154,6 +155,7 @@
 </template>
 <script>
 // import Test from './Test.vue'
+import Steps from 'components/steps/Steps.vue';
 export default {
     /*components: {
     	'test': Test
@@ -196,6 +198,7 @@ export default {
             }
 
         },
+        components: {Steps},
         /*created: {
 
         },*/

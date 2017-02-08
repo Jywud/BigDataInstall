@@ -21,6 +21,7 @@ module.exports = {
     port: 8080,
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
+    proxyTable: {},
     /*proxyTable: {
       '/api': {
         target: 'http://jsonplaceholder.typicode.com',

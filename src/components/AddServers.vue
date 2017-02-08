@@ -1,6 +1,7 @@
 <template>
     <div id="addServers">
-        <h2 class="text-center box-title">添加节点</h2>
+        <steps :active="0"></steps>
+        <!-- <h2 class="text-center box-title">添加节点</h2> -->
         <div class="addServerBox" v-show="isShowBox">
             <div class="top clearfix">
                 <div class="title-name title0 active">
@@ -284,6 +285,7 @@
 <script>
 import util from 'common/js/util.js';
 import { MessageBox } from 'element-ui';
+import Steps from 'components/steps/Steps.vue';
 var currentEditIndex = 0;
 export default {
     name: 'addServers',
@@ -315,6 +317,7 @@ export default {
             // util.saveServers(this.serverList);
         }
     },
+    components: {Steps},
     methods: {
         editServerConfirm() {
             // console.log(currentEditIndex);

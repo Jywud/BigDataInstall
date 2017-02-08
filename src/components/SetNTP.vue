@@ -88,7 +88,8 @@
 </style>
 <template>
 	<div id="setNTP">
-		<h2 class="text-center box-title">配置NTP</h2>
+		<steps :active="2"></steps>
+		<!-- <h2 class="text-center box-title">配置NTP</h2> -->
 		<h4 class="text-center sub-title">注：选择已添加主机或者输入主机ip作为NTP服务器</h4>
 		<div class="row selectPan">
 		    <label class="col-sm-2 control-label selfTitle">自定义主机：</label>
@@ -118,8 +119,10 @@
 </template>
 <script>
 	import util from 'common/js/util.js';
+	import Steps from 'components/steps/Steps.vue';
 	export default{
 		name: 'setNTP',
+		components: {Steps},
 		mounted () {
 		    this.NTPIp = this.$root.NTPIp || '';
 		    if(this.NTPIp) {

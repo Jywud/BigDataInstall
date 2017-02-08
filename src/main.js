@@ -18,6 +18,8 @@ Vue.use(VueResource);
 
 commonCMP.addElementUI();
 
+import 'common/scss/base.scss'
+
 //请求拦截器
 /*Vue.http.interceptors.push(function(request, next) {		
 	// 请求发送前的处理逻辑		

@@ -6,11 +6,12 @@ import ConfigNoPwd from 'components/ConfigNoPwd.vue'
 import SetNTP from 'components/SetNTP.vue'
 import ChooseComponents from 'components/ChooseComponents.vue'
 import InstallComponents from 'components/InstallComponents.vue'
-// import Test from './components/Test.vue'
+import Test from './components/Test.vue'
 
 Vue.use(VueRouter);
 const routes = [
-    { path: '/', component: Login }, {
+    { path: '/', component: Login }, 
+    {
         path: '/login',
         component: Login
         /*,children: [{

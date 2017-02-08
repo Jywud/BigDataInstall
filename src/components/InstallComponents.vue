@@ -45,7 +45,8 @@
 
 <template>
 	<div id="InstallComponents">
-		<h2 class="text-center box-title">安装组件</h2>
+		<steps :active="4"></steps>
+		<!-- <h2 class="text-center box-title">安装组件</h2> -->
 		<div class="content-pan clearfix">
 			<div class="content" v-for="(item, index) in comList">	
 				<p class="text-center content-title">{{item.name}}</p>	
@@ -65,6 +66,7 @@
 
 <script>
 	import { MessageBox } from 'element-ui';
+	import Steps from 'components/steps/Steps.vue';
 	export default{
 		name: 'installComponents',
 		data (){
@@ -105,6 +107,7 @@
 				]
 			}
 		},
+		components: {Steps},
 		methods: {
 			showLog (item) {
 				this.logContent = item.name;

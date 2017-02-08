@@ -16,6 +16,14 @@ ul{
 .box-title{
 	color: #fff;
 }
+/* .el-step__title.is-process{
+	color: #ddd;
+} */
+.step-box{
+	text-align: center;
+	margin-top: 20px;
+	margin-bottom: 20px;
+}
 .mt100{
 	margin-top: 100px;
 }

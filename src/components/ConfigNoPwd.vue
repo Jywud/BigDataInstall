@@ -1,6 +1,7 @@
 <template>
     <div id="configNoPwd">
-        <h2 class="text-center box-title">配置免密码登录</h2>
+        <steps :active="1"></steps>
+        <!-- <h2 class="text-center box-title">配置免密码登录</h2> -->
         <div class="content-pan clearfix">
             <div class="content" v-for="item in serverList">
                 <p class="text-center content-title">{{item.ip}}</p>
@@ -62,6 +63,7 @@
 <script>
 // import Service from '../service.js'
 import { Loading } from 'element-ui';
+import Steps from 'components/steps/Steps.vue';
 export default {
         name: 'configNoPwd',
         mounted() {
@@ -76,6 +78,7 @@ export default {
                 serverList: []
             }
         },
+        components: {Steps},
         methods: {
             back() {
                 this.$router.replace('/addServers');
