@@ -21,16 +21,16 @@ module.exports = {
     port: 8080,
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
-    proxyTable: {},
-    /*proxyTable: {
-      '/api': {
-        target: 'http://jsonplaceholder.typicode.com',
+    // proxyTable: {},
+    proxyTable: {
+      '/npbd': {
+        target: 'http://172.16.61.168:3000/npbd',
         changeOrigin: true,
         pathRewrite: {
-          '^/api': ''
+          '^/npbd': ''
         }
       }
-    },*/
+    },
     // CSS Sourcemaps off by default because relative paths are "buggy"
     // with this option, according to the CSS-Loader README
     // (https://github.com/webpack/css-loader#sourcemaps)

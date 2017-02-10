@@ -34,7 +34,7 @@
 }
 </style>
 <script>
-// import Service from '../service.js'
+import Service from '../service.js'
 // import { Loading } from 'element-ui';
 export default {
     name: 'login',
@@ -50,7 +50,7 @@ export default {
         	setTimeout(function() {
         		loadingInstance1.close();
         	}, 5000);*/
-            /*Service.isPing({ip: '10.0.0.6'}).then(function(data) {
+            /*Service.postTest({name: 'woshi'}).then(function(data) {
             	console.log(data);
             }, function() {
 

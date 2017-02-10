@@ -16,8 +16,11 @@ var interceptors = function() {
 
 export default{
 	// 网络监测
-	isPing (req){
-		return Vue.http.post('/isPing', req);
+	isPing (){
+		return Vue.http.get('/npbd/isPing');
+	},
+	postTest (req){
+		return Vue.http.post('/npbd/add', req);
 	},
 	// 用户名密码检测
 	checkNameAndPwd (req){
