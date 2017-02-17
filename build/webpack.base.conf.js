@@ -28,7 +28,7 @@ module.exports = {
             'src': path.resolve(__dirname, '../src'),
             'common': path.resolve(__dirname, '../src/common'),
             'components': path.resolve(__dirname, '../src/components'),
-            'jquery': path.resolve(__dirname, '../static/lib/jquery-2.0.0.min'),
+            // 'jquery': path.resolve(__dirname, '../static/lib/jquery-2.0.0.min'),
             'lib': path.resolve(__dirname, '../static/lib')
                 // 'jquery': path.resolve(__dirname, '../node_modules/jquery/src/jquery')
 

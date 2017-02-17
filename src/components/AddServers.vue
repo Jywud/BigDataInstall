@@ -1,138 +1,103 @@
 <template>
     <div id="addServers">
-        <steps :active="0"></steps>
-        <!-- <h2 class="text-center box-title">添加节点</h2> -->
-        <div class="addServerBox" v-show="isShowBox">
-            <div class="top clearfix">
-                <div class="title-name title0 active">
-                    添加节点
+        <steps :active="0"></steps>        
+        <div class="content-pan">
+            <h4>IP可以使用如下模式：<mark>192.168.0.1</mark>单个添加 或者 <mark>192.168.0.[1-10]</mark>多个添加</h4>
+            <form class="form-inline condition-box">
+                <div class="form-group">
+                    <div class="input-group">
+                        <div class="input-group-addon">IP</div>
+                        <input type="text" class="form-control" v-model="inputIp" placeholder="ip">
+                    </div>
                 </div>
-                <div class="title-name title1">
-                    批量添加
+                <div class="form-group">
+                    <div class="input-group">
+                        <div class="input-group-addon">用户名</div>
+                        <input type="text" class="form-control" v-model="inputUserName" placeholder="只支持'root' ">
+                    </div>
                 </div>
-            </div>
-            <div class="content">
-                <form class="form-horizontal" role="form">
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label"><span style="color:red">*</span>ip地址：</label>
-                        <div class="col-sm-6">
-                            <input type="text" class="form-control" v-model="inputIp" placeholder="ip地址" @blur="checkRight('ip', inputIp)">
-                        </div>
-                        <span class="col-sm-3 tip-text" v-show="ipError">格式有误</span>
+                <div class="form-group">
+                    <div class="input-group">
+                        <div class="input-group-addon">密码</div>
+                        <input type="text" class="form-control" v-model="inputPassword" placeholder="密码">
                     </div>
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label"><span style="color:red">*</span>用户名：</label>
-                        <div class="col-sm-6">
-                            <input type="text" class="form-control" v-model="inputUserName" placeholder="用户名" @blur="checkRight('name', inputUserName)">
-                        </div>
-                        <span class="col-sm-3 tip-text" v-show="nameError">不能为空</span>
+                </div>
+                <div class="form-group">
+                    <div class="input-group">
+                        <div class="input-group-addon">主机名</div>
+                        <input type="text" class="form-control" v-model="inputHostName" placeholder="主机名">
                     </div>
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label"><span style="color:red">*</span>密码：</label>
-                        <div class="col-sm-6">
-                            <input type="password" class="form-control" v-model="inputPassword" placeholder="密码" @blur="checkRight('pwd', inputPassword)">
-                        </div>
-                        <span class="col-sm-3 tip-text" v-show="pwdError">不能为空</span>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label">主机名：</label>
-                        <div class="col-sm-6">
-                            <input type="text" class="form-control" v-model="inputHostName" placeholder="主机名">
-                        </div>
-                        <span class="col-sm-3 tip-text"></span>
-                    </div>
-                </form>
-            </div>
-            <div class="bottom">
-                <div class="btn btn-primary" @click="confirm">确定</div>
-                <div class="btn btn-primary" @click="cancel">取消</div>
-            </div>
+                </div>
+                <div class="btn btn-success" @click="addServer"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>&nbsp;添加</div>
+            </form>
+            <el-table :data="serverList" stripe border style="width: 100%">
+                <el-table-column prop="ip" label="IP">                    
+                </el-table-column>
+                <el-table-column prop="name" label="用户名">
+                    <template scope="scope">                        
+                        <input type="text" class="form-control" v-model="scope.row.name" placeholder="用户名">
+                      </template>
+                </el-table-column>
+                <el-table-column prop="pwd" label="密码">
+                    <template scope="scope">                        
+                        <input type="text" class="form-control" v-model="scope.row.pwd"  placeholder="密码">
+                      </template>                    
+                </el-table-column>
+                <el-table-column prop="host" label="主机名">
+                    <template scope="scope">                        
+                        <input type="text" class="form-control" v-model="scope.row.host" placeholder="主机名">
+                      </template>                    
+                </el-table-column>
+                <el-table-column prop="delete" :renderHeader="deleteIcon" width="180">
+                    <template scope="scope">
+                        <el-button
+                          size="small"
+                          type="danger"
+                          @click="deleteServer(scope.$index)">删除</el-button>
+                      </template>
+                </el-table-column>
+            </el-table>
         </div>
-        <div class="editServerBox" v-show="isShowEditBox">
-            <div class="top clearfix">
-                <div class="title-name title0 active">
-                    修改节点
-                </div>
-            </div>
-            <div class="content">
-                <form class="form-horizontal" role="form">
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label"><span style="color:red">*</span>ip地址：</label>
-                        <div class="col-sm-6">
-                            <input type="text" disabled class="form-control" v-model="inputIp" placeholder="ip地址" @blur="checkRight('ip', inputIp)">
-                        </div>
-                        <span class="col-sm-3 tip-text" v-show="ipError">格式有误</span>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label"><span style="color:red">*</span>用户名：</label>
-                        <div class="col-sm-6">
-                            <input type="text" disabled class="form-control" v-model="inputUserName" placeholder="用户名" @blur="checkRight('name', inputUserName)">
-                        </div>
-                        <span class="col-sm-3 tip-text" v-show="nameError">不能为空</span>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label"><span style="color:red">*</span>密码：</label>
-                        <div class="col-sm-6">
-                            <input type="password" disabled class="form-control" v-model="inputPassword" placeholder="密码" @blur="checkRight('pwd', inputPassword)">
-                        </div>
-                        <span class="col-sm-3 tip-text" v-show="pwdError">不能为空</span>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label">主机名：</label>
-                        <div class="col-sm-6">
-                            <input type="text" class="form-control" v-model="inputHostName" placeholder="主机名">
-                        </div>
-                        <span class="col-sm-3 tip-text"></span>
-                    </div>
-                </form>
-            </div>
-            <div class="bottom">
-                <div class="btn btn-primary" @click="editServerConfirm">确定</div>
-                <div class="btn btn-primary" @click="editCancel">取消</div>
-            </div>
-        </div>
-        <ul class="serverList">
-            <li class="server" v-for="(server, index) in serverList">
-                {{server.ip}}
-                <div class="editPan">
-                    <div class="delIcon" @click="deleteServer(index)">删除</div>
-                    <div class="editIcon" @click="showEditBox(server, index)">修改</div>
-                </div>
-            </li>
-        </ul>
-        <div class="btn-box">
-            <div class="addIcon" @click="showBox">
-            </div>
-            <div>添加节点</div>
-        </div>
-        <button class="btn btn-primary btn-next" :disabled="nextDisable" @click="next">下一步</button>
+        <button class="btn btn-primary btn-standard btn-next" :disabled="nextDisable" @click="next">下一步&nbsp;<span class="glyphicon glyphicon-menu-right" aria-hidden="true"></span></button>
     </div>
 </template>
-<style lang="scss">
+<style lang="less">
 #addServers {
     position: absolute;
     width: 100%;
     height: 100%;
+    .content-pan {
+        margin: 60px 60px;
+        .condition-box{
+            margin-bottom: 20px;
+        }
+        /* .el-table .cell {
+            text-align: center;
+        } */
+
+    }/* 
     .serverList {
         padding: 0;
         width: 90%;
-        height: 400px;
+        // height: 400px;
         margin: 60px auto;
         // border: 1px solid #888;
         .server {
             position: relative;
             float: left;
+            padding: 5px;
             cursor: pointer;
             color: #fff;
-            background-color: #1C367E;
+            background-color: #eee;
+            border: #666;
             text-align: center;
-            line-height: 50px;
+            // line-height: 150px;
             width: 180px;
-            height: 50px;
-            margin: 30px;
+            // height: 150px;
+            margin: 20px;
             border-radius: 5px;
             &:hover {
-                background-color: #2E55C9;
+                background-color: #aaa;
             }
             &:hover>.editPan {
                 display: block;
@@ -148,28 +113,28 @@
             .editIcon {
                 height: 20px;
                 padding-left: 5px;
-                &:hover{
-                	color: red;
+                &:hover {
+                    color: red;
                 }
             }
             .delIcon {
                 height: 20px;
                 margin-bottom: 10px;
                 padding-left: 5px;
-                &:hover{
-                	color: red;
+                &:hover {
+                    color: red;
                 }
             }
         }
-    }
+    } */
     .tip-text {
         padding-top: 7px;
         margin-bottom: 0;
         text-align: left;
         color: red;
     }
-    .addIcon {
-    	transition: all 0.5s;
+    /* .addIcon {
+        transition: all 0.5s;
         width: 60px;
         height: 60px;
         cursor: pointer;
@@ -180,11 +145,11 @@
         border-radius: 60px;
         margin-bottom: 10px;
         &:hover {
-        	transform: scale(1.1, 1.1);
+            transform: scale(1.1, 1.1);
             background-color: #286090;
             border-color: #204d74;
         }
-    }
+    } */
     .btn-box {
         position: absolute;
         top: 50%;
@@ -193,104 +158,24 @@
         color: #fff;
     }
     .btn-next {
-        position: absolute;
+        position: fixed;
         left: 50%;
         bottom: 60px;
-        background-color: #2A4DB0;
-        padding: 10px 40px;
+        // padding: 10px 40px;
         margin-left: -62px;
-    }
-    .addServerBox {
-        position: absolute;
-        color: #fff;
-        z-index: 1000;
-        width: 400px;
-        height: 380px;
-        background: rgba(21, 65, 122, 0.6);
-        box-shadow: 0 0 12px 5px #15427b;
-        border: 1px solid #2175ff;
-        top: 50%;
-        left: 50%;
-        margin-top: -190px;
-        margin-left: -200px;
-        .top {
-            width: 100%;
-            height: 40px;
-            .title-name {
-                cursor: pointer;
-                border-bottom: 1px solid #2175ff;
-                float: left;
-                text-align: center;
-                width: 50%;
-                line-height: 40px;
-                height: 40px;
-                &.active {
-                    background-color: #3B68FA;
-                }
-                &.title0 {
-                    border-right: 1px solid #2175ff;
-                }
-            }
-        }
-        .content {
-            margin: 50px 0;
-        }
-        .bottom {
-            text-align: center;
-            .btn-primary {
-                padding-left: 60px;
-                padding-right: 60px;
-            }
-        }
-    }
-    .editServerBox {
-        position: absolute;
-        color: #fff;
-        z-index: 1000;
-        width: 400px;
-        height: 380px;
-        background: rgba(21, 65, 122, 0.6);
-        box-shadow: 0 0 12px 5px #15427b;
-        border: 1px solid #2175ff;
-        top: 50%;
-        left: 50%;
-        margin-top: -190px;
-        margin-left: -200px;
-        .top {
-            width: 100%;
-            height: 40px;
-            .title-name {
-                cursor: pointer;
-                border-bottom: 1px solid #2175ff;
-                float: left;
-                text-align: center;
-                width: 100%;
-                line-height: 40px;
-                height: 40px;
-            }
-        }
-        .content {
-            margin: 50px 0;
-        }
-        .bottom {
-            text-align: center;
-            .btn-primary {
-                padding-left: 60px;
-                padding-right: 60px;
-            }
-        }
     }
 }
 </style>
 <script>
 import util from 'common/js/util.js';
-import { MessageBox } from 'element-ui';
+// import { MessageBox } from 'element-ui';
 import Steps from 'components/steps/Steps.vue';
 var currentEditIndex = 0;
 export default {
     name: 'addServers',
-    created: function() {
+    mounted: function() {        
         this.nextDisable = this.$root.serverList && this.$root.serverList.length > 0 ? false : true;
+        this.serverList = this.$root.serverList || [];
     },
     data() {
         return {
@@ -304,7 +189,7 @@ export default {
             isShowBox: false, //是否展示添加服务器面板
             isShowEditBox: false,
             nextDisable: true,
-            serverList: this.$root.serverList || []
+            serverList: []
         }
     },
     watch: {
@@ -317,110 +202,132 @@ export default {
             // util.saveServers(this.serverList);
         }
     },
-    components: {Steps},
+    components: {
+        Steps
+    },
     methods: {
-        editServerConfirm() {
-            // console.log(currentEditIndex);
-            this.serverList.splice(currentEditIndex, 1, {
-                ip: this.inputIp,
-                name: this.inputUserName,
-                pwd: this.inputPassword,
-                host: this.inputHostName,
-                isNTP: false
-            });
-            this.isShowEditBox = false;
-        },
-        editCancel() {
-            this.isShowEditBox = false;
-        },
-        showEditBox(server, index) {
-            currentEditIndex = index;
-            this.isShowEditBox = true;
-            this.isShowBox = false;
-            this.inputIp = server.ip;
-            this.inputUserName = server.name;
-            this.inputPassword = server.pwd;
-            this.inputHostName = server.host
-        },
-        /*deleteServer (index){
-        	this.serverList.splice(index, 1);
-        },*/
-        showBox() {
-            this.isShowEditBox = false;
-            this.inputIp = '',
-                this.inputUserName = '',
-                this.inputPassword = '',
-                this.inputHostName = '',
-                this.ipError = false;
-            this.nameError = false;
-            this.pwdError = false;
-            this.isShowBox = true;
-        },
-        //检查输入框内容
-        checkRight(type, txt) {
-            if (type === 'ip') {
-                if (!util.IP.test(this.inputIp)) {
-                    this.ipError = true;
-                    return;
-                }
-                this.ipError = false;
-            } else if (type === 'name') {
-                if (this.inputUserName === '') {
-                    this.nameError = true;
-                    return;
-                }
-                this.nameError = false;
-            } else if (type === 'pwd') {
-                if (this.inputPassword === '') {
-                    this.pwdError = true;
-                    return;
-                }
-                this.pwdError = false;
+        deleteAll () {
+            if(this.serverList.length >0) {
+                this.$msgbox({
+                    title: '提示',
+                    message: '确定删除所有？',
+                    showCancelButton: true,
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消'
+                }).then(action => {
+                    if (action === 'confirm') {
+                        this.serverList = [];
+                    }
+                });
             }
         },
-        confirm() {
-            if (this.ipError || this.nameError || this.pwdError) {
+        deleteIcon (h, obj) {
+            // console.log(h);
+            return h('div', {domProps:{innerHTML: '全删'}, style: {color: 'blue', cursor: 'pointer'}, on: {click: this.deleteAll}});
+        },
+        getIPs(strIPs) {
+            return strIPs.substring(strIPs.indexOf('[')+1, strIPs.indexOf(']')).split('-');            
+
+        },
+        addServer() {
+            if (this.inputIp === '' || this.inputUserName === '' || this.inputPassword === '' || this.inputHostName === '') {
+                this.$message({
+                  message: '输入内容不能为空！',
+                  type: 'warning'
+                });
                 return;
             }
-            this.serverList.push({
-                ip: this.inputIp,
-                name: this.inputUserName,
-                pwd: this.inputPassword,
-                host: this.inputHostName,
-                isNTP: false
-            });
-            this.inputIp = '',
-                this.inputUserName = '',
-                this.inputPassword = '',
-                this.inputHostName = ''
+
+            // 只支持root用户名
+            if(this.inputUserName !== 'root') {
+                this.$message({
+                  message: '暂时只支持root用户名！',
+                  type: 'warning'
+                });
+                return;
+            }
+            
+            // 匹配ip
+            if(util.isIP(this.inputIp) || util.isIPs(this.inputIp)) {
+                if(util.isIP(this.inputIp)) { //匹配单个ip
+                    // 校验重复ip
+                    let sameIP = false;
+                    this.serverList.forEach(item => {
+                        if(item.ip === this.inputIp) {
+                            sameIP = true;
+                            this.$message({
+                              message: '已添加该ip！',
+                              type: 'warning'
+                            });
+                            return;
+                        }
+                    });
+                    if(sameIP) {
+                        return;
+                    }
+
+                    this.serverList.unshift({
+                        ip: this.inputIp,
+                        name: this.inputUserName,
+                        pwd: this.inputPassword,
+                        host: this.inputHostName,
+                        noPwdPercentage: 0,
+                        noPwdStatus: '就绪',
+                        hostPercentage: 0,
+                        hostStatus: '就绪',
+                        isNTP: false
+                    });
+                } else { //匹配多个ip
+                    let ipHead = this.inputIp.substring(0, this.inputIp.indexOf('['));
+                    let strIps = this.getIPs(this.inputIp);
+                    for(let i=strIps[0]; i<=strIps[1];i++) {
+                        this.serverList.unshift({
+                            ip: ipHead + i,
+                            name: this.inputUserName,
+                            pwd: this.inputPassword,
+                            host: this.inputHostName,
+                            noPwdPercentage: 0,
+                            noPwdStatus: '就绪',
+                            hostPercentage: 0,
+                            hostStatus: '就绪',
+                            isNTP: false
+                        });
+                    }
+                }
+            } else {
+                this.$message({
+                  message: '输入的ip格式有误！',
+                  type: 'warning'
+                });
+            }
+            
+            // this.inputIp = '',
+            // this.inputUserName = '',
+            // this.inputPassword = '',
+            // this.inputHostName = ''
 
         },
         deleteServer(index) {
-            var self = this;
-            MessageBox({
+            this.serverList.splice(index, 1);
+            /*this.$msgbox({
                 title: '提示',
                 message: '确定删除？',
                 showCancelButton: true,
                 confirmButtonText: '确定',
                 cancelButtonText: '取消'
-            }).then(function(action) {
+            }).then(action => {
                 if (action === 'confirm') {
-                    self.serverList.splice(index, 1);
+                    this.serverList.splice(index, 1);
                 }
-            });
-            // 箭头函数写法
-            /*this.$msgbox({ title: '提示', message: '确定删除？', showCancelButton: true, confirmButtonText: '确定', cancelButtonText: '取消' }).then(action => { 
-            	if(action === 'confirm') {
-            		this.serverList.splice(index, 1);
-            	}
             });*/
         },
 
-        cancel() {
+        /*cancel() {
             this.isShowBox = false;
-        },
+        },*/
         next() {
             this.$router.replace('/configNoPwd');
+            // this.$router.replace('/setNTP');
         }
 
     }

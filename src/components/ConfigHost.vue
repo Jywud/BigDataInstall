@@ -1,24 +1,23 @@
 <template>
     <div id="configNoPwd">
-        <steps :active="1"></steps>
-        <h4 class="text-center text-info" v-show="showInfo">免密配置失败，请重试！</h4>
+        <steps :active="2"></steps>
+        <h4 class="text-center text-info" v-show="showInfo">主机配置失败，请重试！</h4>
         <div class="table-pan">
             <el-table :data="serverList" stripe border style="width: 100%">
                 <el-table-column prop="ip" label="IP" width="260">                    
                 </el-table-column>
-                <el-table-column prop="noPwdPercentage" label="进度">
+                <el-table-column prop="hostPercentage" label="进度">
                     <template scope="scope">    
-                        <el-progress :percentage="scope.row.noPwdPercentage"></el-progress>
+                        <el-progress :percentage="scope.row.hostPercentage"></el-progress>
                     </template>
                 </el-table-column>
-                <el-table-column prop="noPwdStatus" label="状态" width="260">
+                <el-table-column prop="hostStatus" label="状态" width="260">
                     <template scope="scope">   
-                        <span>{{scope.row.noPwdStatus}}</span> 
+                        <span>{{scope.row.hostStatus}}</span> 
                       </template>                    
                 </el-table-column>
             </el-table>
         </div>
-        
         <div class="btn-pan">
             <button class="btn btn-primary btn-standard btn-back" @click="back">
                 <span class="glyphicon glyphicon-menu-left" aria-hidden="true"></span>&nbsp;上一步
@@ -41,31 +40,6 @@
         margin-top: 60px;
         color: red;
     }
-    /* .content-pan {
-        width: 1050px;
-        margin: 50px auto;
-        .content {
-            position: relative;
-            width: 200px;
-            height: 200px;
-            border-radius: 10px;
-            box-shadow: 2px 2px 10px 1px #888;
-            // background-color: #ccc;
-            float: left;
-            border: 1px solid #aa3;
-            padding: 10px 38px;
-            margin-bottom: 10px;
-            margin-right: 10px;
-            text-align: center;
-            .content-title {
-                font-weight: 800;
-                color: #222;
-            }
-            .comp-progress {
-                margin-bottom: 20px;
-            }
-        }
-    } */
     .btn-pan {
         position: absolute;
         bottom: 60px;
@@ -79,41 +53,39 @@
 import { Loading } from 'element-ui';
 import Steps from 'components/steps/Steps.vue';
 export default {
-        name: 'configNoPwd',
+        name: 'configHost',
         mounted() {
             // 进入页面自动调用配置接口
             /*var loadingInstance = Loading.service({
                 fullscreen: true,
-                text: '免密配置中,请勿刷新页面...'
+                text: '主机配置中,请勿刷新页面...'
             });
             setTimeout(() => {
                 loadingInstance.close();
-                this.$router.replace('/configHost');
+                this.$router.replace('/setNTP');
             }, 2000);*/
-
-
             this.serverList = this.$root.serverList || [];
         },
         data() {
             return {
-                showInfo: false,
-                serverList: []
+                serverList: [],
+                showInfo: false
             }
         },
         components: {Steps},
         methods: {
             back() {
-                this.$router.replace('/addServers');
+                this.$router.replace('/configNoPwd');
             },
             next() {
                 var loadingInstance = Loading.service({
                     fullscreen: true,
-                    text: '免密配置中,请勿刷新页面...'
+                    text: '主机配置中,请勿刷新页面...'
                 });
 
                 setTimeout(() => {
                     loadingInstance.close();
-                    this.$router.replace('/configHost');
+                    this.$router.replace('/setNTP');
                 }, 2000)
 
             }

@@ -1,7 +1,7 @@
 <style lang="less"> 
 	#setNTP{
 		.sub-title{
-			margin: 40px;
+			margin-top: 40px;
 			color: #bbb;
 		}
 		.list-title{
@@ -21,6 +21,7 @@
 				font-size: 15px;
 			}
 			.error-text{
+				margin-left: 5px;
 				margin-top: 4px;
 				color: red;
 			}
@@ -35,13 +36,21 @@
 			bottom: 60px;
 			left: 50%;
 			margin-left: -126px;
+			.btn-back{
+				background-color: #2A4DB0;
+				padding: 10px 40px;
+			}
+			.btn-next{		
+				background-color: #2A4DB0;
+				padding: 10px 40px;
+			}
+			
 		}
 		.serverList{
 			padding: 0;
 			width: 90%;
 			height: 200px;
 	    	margin: 0 auto;
-	    	overflow-y: auto;
 	    	// border: 1px solid #888;
 
 	    	.server{
@@ -86,20 +95,20 @@
 	<div id="setNTP">
 		<steps :active="3"></steps>
 		<!-- <h2 class="text-center box-title">配置NTP</h2> -->
-		<h4 class="text-center sub-title">注：输入自定义主机ip或者选择已添加主机作为NTP服务器</h4>
-		<p class="result-text text-center">您选择的NTP服务器IP：{{NTPIp}}</p>
+		<h4 class="text-center sub-title">注：点击已添加主机或者输入主机ip作为时钟同步服务器</h4>
+
 		<form class="form-inline selectPan">
 		  <div class="form-group">
-		    <label>输入自定义主机：</label>
-		    <input type="text" class="form-control" v-model="selfModul" placeholder="输入自定义主机ip" >
+		    <label>时钟同步服务器：</label>
+		    <input type="text" class="form-control" v-model="NTPIp" :disabled="isInputDisable" @blur="inputBlur">
 		  </div>
 		  <div class="form-group">
-		    <div class="btn btn-success btn-setting" @click="setSelfNTP">设置</div>
-			<span class="error-text" v-show="showErrorTip">格式有误</span>
+		    <span class="glyphicon glyphicon-pencil pointer" aria-hidden="true" @click="editNTP">
+			<span class="error-text" v-show="showErrorTip">IP格式有误</span>
 		  </div>
 		</form>
 
-		<h5 class="list-title">选择已添加主机：</h5>
+		<h5 class="list-title">已添加主机：</h5>
 		<ul class="serverList">
 			<li class="server" v-for="(server, index) in serverList" @click="setNTP(server)" >
 				{{server.ip}}
@@ -108,10 +117,10 @@
 				</div>
 			</li>
 		</ul>
-		
+		<!-- <p class="result-text text-center">您选择的NTP服务器IP：{{NTPIp}}</p> -->
 		<div class="btn-pan">
-			<button class="btn btn-primary btn-standard btn-back" @click="back"><span class="glyphicon glyphicon-menu-left" aria-hidden="true"></span>&nbsp;上一步</button>
-			<button class="btn btn-primary btn-standard btn-next" :disabled= "nextDisable" @click="next">下一步&nbsp;<span class="glyphicon glyphicon-menu-right" aria-hidden="true"></span></button>
+			<button class="btn btn-primary btn-back" @click="back">上一步</button>
+			<button class="btn btn-primary btn-next" :disabled= "nextDisable" @click="next">下一步</button>
 		</div>
 		
 	</div>
@@ -138,20 +147,30 @@
 		data (){
 			return {
 				NTPIp: this.$root.NTPIp || '',  //设置的ip
-				selfModul: '', //自定义的ip
+				isInputDisable: true,
 				serverList: this.$root.serverList || [],
 				nextDisable: true,
 				showErrorTip: false
-				/*serverList:
-				[{host:"1111",ip:"11.11.11.11",isNTP:false,name:"11",pwd:"11"},
-				 {host:"2222",ip:"22.11.11.11",isNTP:false,name:"11",pwd:"11"},
-				 {host:"3333",ip:"33.11.11.11",isNTP:false,name:"11",pwd:"11"},
-				]*/
 			}
 		},
 		methods: {
+			// 输入框失去焦点，发时钟同步请求
+			inputBlur() {
+				if(util.IP.test(this.NTPIp)) {
+					this.showErrorTip = false;	
+					this.isInputDisable = true;
+					console.log('时钟请求');				
+				} else {
+					this.showErrorTip = true;	
+				}
+
+				
+			},
+			editNTP() {
+				this.isInputDisable = false;
+			},
 			setSelfNTP (){
-				if(!util.IP.test(this.selfModul)) {
+				/*if(!util.IP.test(this.selfModul)) {
 					this.showErrorTip = true;
 					return;
 				}
@@ -159,23 +178,20 @@
 				this.NTPIp = this.selfModul;
 				this.serverList.forEach((ser) => {
 					ser.isNTP = false;
-				});
+				});*/
 			},
 			setNTP (server){
-				this.selfModul = '';
+				// this.selfModul = '';
 				this.showErrorTip = false;
-				var curNTPStatus = server.isNTP;
-				this.serverList.forEach((ser) => {
+
+				console.log('时钟请求');
+
+				this.serverList.forEach( ser => {
 					ser.isNTP = false;
 				});	
-				server.isNTP = !curNTPStatus;
-				if(server.isNTP === true) {
-					this.NTPIp = server.ip;
-				} else {
-					this.NTPIp = '';
-				}
-				
-				// server.isNTP = !server.isNTP;
+				server.isNTP = true;
+
+				this.NTPIp = server.ip;
 			},
 			back (){
 				this.$router.replace('/addServers');

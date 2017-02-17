@@ -6,19 +6,22 @@ import App from './App'
 
 //暂时不用jquery
 // import $ from 'jquery'
-// import 'lib/bootstrap/bootstrap.min' 
+// import 'lib/bootstrap/js/bootstrap.min' 
 // import 'lib/layer/layer.js'
 // import 'lib/layer/skin/default/layer.css'
 
 //加载第三方组件
-import commonCMP from 'common/js/commonCMP.js'
+import ElementUI from 'element-ui'
+import 'element-ui/lib/theme-default/index.css'
+// import commonCMP from 'common/js/commonCMP.js'
 import router from './router.js'
 
 Vue.use(VueResource);
+Vue.use(ElementUI);
+// commonCMP.addElementUI();
 
-commonCMP.addElementUI();
-
-import 'common/scss/base.scss'
+//不要换代码位置
+import 'common/less/base.less'
 
 //请求拦截器
 /*Vue.http.interceptors.push(function(request, next) {		

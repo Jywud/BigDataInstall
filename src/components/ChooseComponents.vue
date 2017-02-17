@@ -1,22 +1,27 @@
-<style lang="scss">
+<style lang="less">
 #chooseComponents {
     position: absolute;
     width: 100%;
     height: 100%;
-    color: #fff;
-    .btn-next {
+    color: #000;
+    .btn-pan{
+            position: absolute;
+            bottom: 60px;
+            left: 50%;
+            margin-left: -126px;
+        }
+    /* .btn-next {
         position: absolute;
         left: 50%;
         bottom: 60px;
-        background-color: #2A4DB0;
-        padding: 10px 40px;
+        // padding: 10px 40px;
         margin-left: -62px;
-    }
+    } */
     .default-color {
-        color: #fff;
+        color: #000;
     }
     .install-type-pan {
-        margin: 60px auto;
+        margin: 50px auto 30px;
         width: 200px;
         text-align: center;
     }
@@ -51,7 +56,7 @@
 </style>
 <template>
     <div id="chooseComponents">
-        <steps :active="3"></steps>
+        <steps :active="4"></steps>
         <!-- <h2 class="text-center box-title">选择安装组件</h2> -->
         <div class="install-type-pan">
             <el-radio-group v-model="installType" @change="chooseType">
@@ -150,20 +155,20 @@
                 </el-table-column>
             </el-table>
         </div>
-        <button class="btn btn-primary btn-next" :disabled="nextDisable" @click="next">下一步</button>
+        <div class="btn-pan">
+            <button class="btn btn-primary btn-standard btn-back" @click="back"><span class="glyphicon glyphicon-menu-left" aria-hidden="true"></span>&nbsp;上一步</button>
+            <button class="btn btn-primary btn-standard btn-next" :disabled= "nextDisable" @click="next">下一步&nbsp;<span class="glyphicon glyphicon-menu-right" aria-hidden="true"></span></button>
+        </div>
+        <!-- <button class="btn btn-primary btn-standard btn-next" :disabled="nextDisable" @click="next">下一步&nbsp;<span class="glyphicon glyphicon-menu-right" aria-hidden="true"></span></button> -->
     </div>
 </template>
 <script>
 // import Test from './Test.vue'
 import Steps from 'components/steps/Steps.vue';
 export default {
-    /*components: {
-    	'test': Test
-    },*/
     name: 'chooseComponents',
     data() {
             return {
-                name: 'xiaoxin',
                 installType: 0,
                 mainServer: '',
                 nextDisable: false,
@@ -206,9 +211,12 @@ export default {
             chooseType(value) {
                 this.showmainPan = value === 1 ? false : true;
             },
+            back(){
+                this.$router.replace('/setNTP');
+            },
             next() {
             	this.$router.replace('/installComponents');
-            	console.log(this.tableData + '-------' + this.azkaban);
+            	// console.log(this.tableData + '-------' + this.azkaban);
             }
         },
         watch: {

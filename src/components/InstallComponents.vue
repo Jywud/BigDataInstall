@@ -1,9 +1,9 @@
-<style lang="scss">
+<style lang="less">
 	#InstallComponents{
 		position: absolute;
 	    width: 100%;
 	    height: 100%;
-	    color: #fff;
+	    color: #000;
 		.content-pan{
 			width: 1050px;
 			margin: 50px auto;
@@ -13,7 +13,7 @@
 				height: 240px;
 				border-radius: 10px;
 				box-shadow: 2px 2px 10px 1px #888;
-				background-color: #ccc;
+				// background-color: #ccc;
 				float: left;
 				border: 1px solid #aa3;
 				padding: 10px 38px;
@@ -32,20 +32,25 @@
 				// color: #fff;
 			}
 		}
-		.btn-next {
+		.btn-pan {
 	        position: absolute;
-	        left: 50%;
 	        bottom: 60px;
-	        background-color: #2A4DB0;
-	        padding: 10px 40px;
-	        margin-left: -62px;
+	        left: 50%;
+	        margin-left: -126px;
 	    }
+		/* .btn-next {
+			        position: absolute;
+			        left: 50%;
+			        bottom: 60px;
+			        // padding: 10px 40px;
+			        margin-left: -62px;
+			    } */
 	}
 </style>
 
 <template>
 	<div id="InstallComponents">
-		<steps :active="4"></steps>
+		<steps :active="5"></steps>
 		<!-- <h2 class="text-center box-title">安装组件</h2> -->
 		<div class="content-pan clearfix">
 			<div class="content" v-for="(item, index) in comList">	
@@ -55,7 +60,15 @@
 			</div>
 			
 		</div>
-		<button class="btn btn-primary btn-next" :disabled="nextDisable" @click="next">启动</button>
+		<div class="btn-pan">
+            <button class="btn btn-primary btn-standard btn-back" @click="back">
+                <span class="glyphicon glyphicon-menu-left" aria-hidden="true"></span>&nbsp;上一步
+            </button>
+            <button class="btn btn-primary btn-standard btn-next" icon="search" @click="next">
+                <span class="glyphicon glyphicon-triangle-right" aria-hidden="true"></span>&nbsp;执行
+            </button>
+        </div>
+		<!-- <button class="btn btn-primary btn-standard btn-next" :disabled="nextDisable" @click="next"><span class="glyphicon glyphicon-triangle-right" aria-hidden="true"></span>&nbsp;启动</button> -->
 		<el-dialog title="日志信息" v-model="dialogFormVisible">
 		    <div style="height:400px;overflow-y:auto;padding:10px">
 		    	{{logContent}}
@@ -65,14 +78,14 @@
 </template>
 
 <script>
-	import { MessageBox } from 'element-ui';
+	// import { MessageBox } from 'element-ui';
 	import Steps from 'components/steps/Steps.vue';
 	export default{
 		name: 'installComponents',
 		data (){
 			return {
 				dialogFormVisible: false, //是否展示日志框
-				nextDisable: true,
+				nextDisable: false,
 				logContent: '', //日志信息
 				comList: [
 					{
@@ -113,8 +126,11 @@
 				this.logContent = item.name;
 				this.dialogFormVisible = true;
 			},
+			back() {
+				this.$router.replace('chooseComponents');
+			},
 			next (){
-
+				this.$router.replace('startComponents');
 			}
 		}
 	}
