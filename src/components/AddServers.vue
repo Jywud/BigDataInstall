@@ -1,9 +1,10 @@
 <template>
     <div id="addServers">
-        <steps :active="0"></steps>        
+        <steps :active="0"></steps>
         <div class="content-pan">
-            <h4>IP可以使用如下模式：<mark>192.168.0.1</mark>单个添加 或者 <mark>192.168.0.[1-10]</mark>多个添加</h4>
-            <form class="form-inline condition-box">
+            <!-- <h4>IP可以使用如下模式：<mark>192.168.0.1</mark>单个添加 或者 <mark>192.168.0.[1-10]</mark>批量添加</h4> -->
+            <h4>IP可以使用如下模式：192.168.0.1单个添加 或者 192.168.0.[1-10]批量添加</h4>
+            <div class="form-inline condition-box">
                 <div class="form-group">
                     <div class="input-group">
                         <div class="input-group-addon">IP</div>
@@ -19,42 +20,49 @@
                 <div class="form-group">
                     <div class="input-group">
                         <div class="input-group-addon">密码</div>
-                        <input type="text" class="form-control" v-model="inputPassword" placeholder="密码">
+                        <input type="password" class="form-control" v-model="inputPassword" placeholder="密码">
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="input-group">
-                        <div class="input-group-addon">主机名</div>
-                        <input type="text" class="form-control" v-model="inputHostName" placeholder="主机名">
+                        <div class="input-group-addon">主机名前缀</div>
+                        <input type="text" class="form-control" v-model="inputHostName" placeholder="主机名前缀">
                     </div>
                 </div>
                 <div class="btn btn-success" @click="addServer"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>&nbsp;添加</div>
-            </form>
+            </div>
             <el-table :data="serverList" stripe border style="width: 100%">
-                <el-table-column prop="ip" label="IP">                    
+                <el-table-column prop="ip" label="IP">
                 </el-table-column>
                 <el-table-column prop="name" label="用户名">
-                    <template scope="scope">                        
+                    <template scope="scope">
                         <input type="text" class="form-control" v-model="scope.row.name" placeholder="用户名">
-                      </template>
+                    </template>
                 </el-table-column>
                 <el-table-column prop="pwd" label="密码">
-                    <template scope="scope">                        
-                        <input type="text" class="form-control" v-model="scope.row.pwd"  placeholder="密码">
-                      </template>                    
+                    <template scope="scope">
+                        <input type="password" class="form-control" v-model="scope.row.pwd" placeholder="密码">
+                    </template>
                 </el-table-column>
                 <el-table-column prop="host" label="主机名">
-                    <template scope="scope">                        
-                        <input type="text" class="form-control" v-model="scope.row.host" placeholder="主机名">
-                      </template>                    
-                </el-table-column>
-                <el-table-column prop="delete" :renderHeader="deleteIcon" width="180">
                     <template scope="scope">
-                        <el-button
-                          size="small"
-                          type="danger"
-                          @click="deleteServer(scope.$index)">删除</el-button>
-                      </template>
+                        <input type="text" class="form-control" v-model="scope.row.host" placeholder="主机名">
+                    </template>
+                </el-table-column>
+                <el-table-column prop="info" :renderHeader="deleteIcon" width="250">
+                    <template scope="scope">
+                        <div class="btn btn-danger btn-delete" @click="deleteServer(scope.$index)">
+                            删除
+                        </div>
+                        <el-popover style="display: inline-block" v-show="scope.row.showError" placement="left" width="300" trigger="hover" :content="scope.row.errorMsg">
+                            <button slot="reference" class="btn btn-warning btn-delete">错误提示</button>
+                        </el-popover>
+                        <!-- <el-tooltip placement="top" style="display: inline-block" v-show="scope.row.showError">
+                            <div slot="content">{{scope.row.errorMsg}}</div>
+                            <button class="btn btn-warning btn-delete">错误提示</button>
+                        </el-tooltip> -->
+                        <!-- <span class="error-msg" v-show="scope.row.showError">{{scope.row.errorMsg}}</span> -->
+                    </template>
                 </el-table-column>
             </el-table>
         </div>
@@ -66,90 +74,22 @@
     position: absolute;
     width: 100%;
     height: 100%;
+    // background: url('/static/image/install_bg.jpg'); 
     .content-pan {
         margin: 60px 60px;
-        .condition-box{
+        .condition-box {
             margin-bottom: 20px;
         }
-        /* .el-table .cell {
-            text-align: center;
-        } */
-
-    }/* 
-    .serverList {
-        padding: 0;
-        width: 90%;
-        // height: 400px;
-        margin: 60px auto;
-        // border: 1px solid #888;
-        .server {
-            position: relative;
-            float: left;
-            padding: 5px;
-            cursor: pointer;
-            color: #fff;
-            background-color: #eee;
-            border: #666;
-            text-align: center;
-            // line-height: 150px;
-            width: 180px;
-            // height: 150px;
-            margin: 20px;
-            border-radius: 5px;
-            &:hover {
-                background-color: #aaa;
-            }
-            &:hover>.editPan {
-                display: block;
-            }
-            .editPan {
-                position: absolute;
-                display: none;
-                line-height: 20px;
-                top: 0px;
-                right: -35px;
-                width: 40px;
-            }
-            .editIcon {
-                height: 20px;
-                padding-left: 5px;
-                &:hover {
-                    color: red;
-                }
-            }
-            .delIcon {
-                height: 20px;
-                margin-bottom: 10px;
-                padding-left: 5px;
-                &:hover {
-                    color: red;
-                }
-            }
+        .error-msg {
+            color: red;
         }
-    } */
+    }
     .tip-text {
         padding-top: 7px;
         margin-bottom: 0;
         text-align: left;
         color: red;
     }
-    /* .addIcon {
-        transition: all 0.5s;
-        width: 60px;
-        height: 60px;
-        cursor: pointer;
-        background-color: #2A4DB0;
-        background-image: url('/static/image/addServer_icon.png');
-        background-repeat: no-repeat;
-        background-position: center;
-        border-radius: 60px;
-        margin-bottom: 10px;
-        &:hover {
-            transform: scale(1.1, 1.1);
-            background-color: #286090;
-            border-color: #204d74;
-        }
-    } */
     .btn-box {
         position: absolute;
         top: 50%;
@@ -157,32 +97,56 @@
         margin-left: -30px;
         color: #fff;
     }
+    .btn-delete {
+        padding: 4px 8px;
+    }
     .btn-next {
         position: fixed;
         left: 50%;
         bottom: 60px;
-        // padding: 10px 40px;
         margin-left: -62px;
     }
 }
 </style>
 <script>
 import util from 'common/js/util.js';
-// import { MessageBox } from 'element-ui';
+import {
+    Loading
+} from 'element-ui';
 import Steps from 'components/steps/Steps.vue';
 var currentEditIndex = 0;
 export default {
     name: 'addServers',
-    mounted: function() {        
-        this.nextDisable = this.$root.serverList && this.$root.serverList.length > 0 ? false : true;
-        this.serverList = this.$root.serverList || [];
+    mounted: function() {
+        let serverList = util.getSessionData('serverList');
+        this.nextDisable = serverList && serverList.length > 0 ? false : true;
+        this.serverList = serverList || [];
+
+        var loadingInstance = Loading.service({
+            fullscreen: true,
+            text: '初始化,请勿刷新页面...'
+        });
+
+        AJAX.init().then(res => {
+            loadingInstance.close();
+        }, res => {
+            loadingInstance.close();
+            this.$message({
+                message: '系统异常',
+                type: 'warning'
+            });
+        });
+    },
+    beforeRouteEnter(to, from, next) {
+        console.log(from.path);
+        next();
     },
     data() {
         return {
-            inputIp: '',
-            inputUserName: '',
-            inputPassword: '',
-            inputHostName: '',
+            inputIp: '172.16.61.[196-198]',
+            inputUserName: 'root',
+            inputPassword: '123456',
+            inputHostName: 'node',
             ipError: false,
             nameError: false,
             pwdError: false,
@@ -193,21 +157,30 @@ export default {
         }
     },
     watch: {
-        serverList(newData, oldData) {
-            //保存到全局
-            this.$root.serverList = this.serverList;
-
-            this.nextDisable = this.serverList.length > 0 ? false : true;
-
-            // util.saveServers(this.serverList);
+        //深层监听
+        serverList: {
+            handler(newData, oldData) {
+                util.setSessionData('serverList', this.serverList);
+                this.nextDisable = this.serverList.length > 0 ? false : true;
+            },
+            deep: true
         }
+        /*serverList(newData, oldData) {            
+            util.setSessionData('serverList', this.serverList);
+            this.nextDisable = this.serverList.length > 0 ? false : true;
+        }*/
     },
     components: {
         Steps
     },
+    computed: {
+        hostName() {
+            return this.inputHostName + this.inputIp.substring(this.inputIp.lastIndexOf('.') + 1);
+        }
+    },
     methods: {
-        deleteAll () {
-            if(this.serverList.length >0) {
+        deleteAll() {
+            if (this.serverList.length > 0) {
                 this.$msgbox({
                     title: '提示',
                     message: '确定删除所有？',
@@ -221,113 +194,238 @@ export default {
                 });
             }
         },
-        deleteIcon (h, obj) {
+        deleteIcon(h, obj) {
             // console.log(h);
-            return h('div', {domProps:{innerHTML: '全删'}, style: {color: 'blue', cursor: 'pointer'}, on: {click: this.deleteAll}});
+            return h('div', {
+                domProps: {
+                    innerHTML: '全部删除'
+                },
+                style: {
+                    color: 'blue',
+                    cursor: 'pointer'
+                },
+                on: {
+                    click: this.deleteAll
+                }
+            }, [
+
+            ]);
         },
         getIPs(strIPs) {
-            return strIPs.substring(strIPs.indexOf('[')+1, strIPs.indexOf(']')).split('-');            
+            return strIPs.substring(strIPs.indexOf('[') + 1, strIPs.indexOf(']')).split('-');
 
+        },
+        checkSameIPs(ip) {
+            let same = false;
+            for (let i = 0; i < this.serverList.length; i++) {
+                if (this.serverList[i].ip == ip) {
+                    same = true;
+                    break;
+                }
+            }
+            return same;
         },
         addServer() {
             if (this.inputIp === '' || this.inputUserName === '' || this.inputPassword === '' || this.inputHostName === '') {
                 this.$message({
-                  message: '输入内容不能为空！',
-                  type: 'warning'
+                    message: '输入内容不能为空！',
+                    type: 'warning'
+                });
+                return;
+            }
+            // 只支持root用户名
+            if (this.inputUserName !== 'root') {
+                this.$message({
+                    message: '暂时只支持root用户名！',
+                    type: 'warning'
                 });
                 return;
             }
 
-            // 只支持root用户名
-            if(this.inputUserName !== 'root') {
-                this.$message({
-                  message: '暂时只支持root用户名！',
-                  type: 'warning'
-                });
-                return;
-            }
-            
-            // 匹配ip
-            if(util.isIP(this.inputIp) || util.isIPs(this.inputIp)) {
-                if(util.isIP(this.inputIp)) { //匹配单个ip
+            // 匹配ip,检查主机名重复
+            if (util.isIP(this.inputIp) || util.isIPs(this.inputIp)) {
+                if (util.isIP(this.inputIp)) { //匹配单个ip
                     // 校验重复ip
                     let sameIP = false;
+                    // let sameHost = false;
                     this.serverList.forEach(item => {
-                        if(item.ip === this.inputIp) {
+                        if (item.ip === this.inputIp) {
                             sameIP = true;
                             this.$message({
-                              message: '已添加该ip！',
-                              type: 'warning'
+                                message: '已添加该ip！',
+                                type: 'warning'
                             });
                             return;
                         }
                     });
-                    if(sameIP) {
+
+                    if (sameIP) {
                         return;
                     }
 
-                    this.serverList.unshift({
+                    this.serverList.push({
                         ip: this.inputIp,
                         name: this.inputUserName,
                         pwd: this.inputPassword,
-                        host: this.inputHostName,
+                        host: this.hostName,
+                        showError: false,
+                        errorMsg: '',
                         noPwdPercentage: 0,
-                        noPwdStatus: '就绪',
+                        // noPwdStatus: '就绪',
+                        noPwdPerStatus: '',
                         hostPercentage: 0,
-                        hostStatus: '就绪',
+                        // hostStatus: '就绪',
+                        hostPerStatus: '',
                         isNTP: false
                     });
                 } else { //匹配多个ip
                     let ipHead = this.inputIp.substring(0, this.inputIp.indexOf('['));
                     let strIps = this.getIPs(this.inputIp);
-                    for(let i=strIps[0]; i<=strIps[1];i++) {
-                        this.serverList.unshift({
-                            ip: ipHead + i,
-                            name: this.inputUserName,
-                            pwd: this.inputPassword,
-                            host: this.inputHostName,
-                            noPwdPercentage: 0,
-                            noPwdStatus: '就绪',
-                            hostPercentage: 0,
-                            hostStatus: '就绪',
-                            isNTP: false
-                        });
+                    for (let i = strIps[0]; i <= strIps[1]; i++) {
+
+                        if (this.checkSameIPs(ipHead + i)) { //判断重复
+                            continue;
+                        } else {
+                            this.serverList.push({
+                                ip: ipHead + i,
+                                name: this.inputUserName,
+                                pwd: this.inputPassword,
+                                host: this.inputHostName + i,
+                                showError: false,
+                                errorMsg: '',
+                                noPwdPercentage: 0,
+                                // noPwdStatus: '就绪',
+                                noPwdPerStatus: '',
+                                hostPercentage: 0,
+                                // hostStatus: '就绪',
+                                hostPerStatus: '',
+                                isNTP: false
+                            });
+                        }
+
                     }
                 }
             } else {
                 this.$message({
-                  message: '输入的ip格式有误！',
-                  type: 'warning'
+                    message: '输入的ip格式有误！',
+                    type: 'warning'
                 });
             }
-            
-            // this.inputIp = '',
-            // this.inputUserName = '',
-            // this.inputPassword = '',
-            // this.inputHostName = ''
 
         },
         deleteServer(index) {
             this.serverList.splice(index, 1);
-            /*this.$msgbox({
-                title: '提示',
-                message: '确定删除？',
-                showCancelButton: true,
-                confirmButtonText: '确定',
-                cancelButtonText: '取消'
-            }).then(action => {
-                if (action === 'confirm') {
-                    this.serverList.splice(index, 1);
-                }
-            });*/
         },
+        addAjax(reqList) {
+            let loadingInstance = Loading.service({
+                fullscreen: true,
+                text: '节点添加中,请勿刷新页面...'
+            });
 
-        /*cancel() {
-            this.isShowBox = false;
-        },*/
+            AJAX.save({
+                type: 'node',
+                jsonstr: JSON.stringify(reqList)
+            }).then(res => {
+                loadingInstance.close();
+                if (res.body.status === 'success') {
+                    this.$router.replace('/configNoPwd');
+                } else {
+                    this.$message({
+                        message: res.body.status,
+                        type: 'warning'
+                    });
+                }
+            }, res => {
+                loadingInstance.close();
+                this.$message({
+                    message: '系统异常',
+                    type: 'warning'
+                });
+            });
+        },
         next() {
-            this.$router.replace('/configNoPwd');
-            // this.$router.replace('/setNTP');
+
+            let reqList = [];
+            this.serverList.forEach(server => {
+                reqList.push({
+                    ip: server.ip,
+                    hostname: server.host,
+                    port: 22,
+                    username: server.name,
+                    pwd: server.pwd
+                });
+            });
+
+            //检查节点
+            var loadingInstance = Loading.service({
+                fullscreen: true,
+                text: '节点检查中,请勿刷新页面...'
+            });
+
+            let ajaxNum = 0;
+            let stopAdd = false;
+            reqList.forEach((data, index) => {
+                var self = this;
+                (function(index) {
+
+                    AJAX.check({
+                        type: 'node',
+                        json: JSON.stringify(data)
+                    }).then(res => {
+                        console.log('---check---' + index);
+                        if (res.body.status === 'success') {
+                            self.serverList[index]['showError'] = false;
+                            stopAdd = stopAdd || false;
+                        } else {
+                            self.serverList[index]['errorMsg'] = res.body.status || '无';
+                            self.serverList[index]['showError'] = true;
+                            stopAdd = stopAdd || true;
+                        }
+                        ajaxNum++;
+
+                        //请求完成并且都通过检查
+                        if (ajaxNum === reqList.length) {
+                            loadingInstance.close();
+                            if (!stopAdd) {
+                                console.log('--addAjax--');
+                                self.addAjax(reqList);
+                            }
+                        }
+                    }, res => {
+                        loadingInstance.close();
+                        self.$message({
+                            message: '系统异常',
+                            type: 'warning'
+                        });
+                    });
+
+                })(index);
+            });
+
+
+            //保存节点
+            /*var loadingInstance = Loading.service({
+                fullscreen: true,
+                text: '节点添加中,请勿刷新页面...'
+            });
+
+            AJAX.save({type:'node', jsonstr: JSON.stringify(reqList)}).then(res => {
+                loadingInstance.close();
+                if(res.body.status === 'success') {
+                    this.$router.replace('/configNoPwd');
+                }else {
+                    this.$message({
+                        message: res.body.status,
+                        type: 'warning'
+                    });
+                }
+            }, res =>{
+                loadingInstance.close();
+                this.$message({
+                    message: '系统异常',
+                    type: 'warning'
+                });
+            });*/
         }
 
     }

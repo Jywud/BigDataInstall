@@ -12,7 +12,7 @@
   }
   
   .fade-enter, .fade-leave-active{
-  	transform: rotateY(90deg);
+  	/*transform: rotateY(90deg);*/
     opacity: 0;
   }
   

@@ -1,10 +1,4 @@
 {
-  "presets": ["es2015"],
-  "plugins": ["transform-runtime", ["component", [
-    {
-      "libraryName": "element-ui",
-      "styleLibraryName": "theme-default"
-    }
-  ]]],
+  "presets": ["es2015"],  
   "comments": false
 }

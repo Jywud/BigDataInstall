@@ -2,12 +2,13 @@
 html, body{
 	font-family: "Microsoft YaHei";
 	height: 100%;
+	min-width: 800px;
 }
 body{
-	min-width: 800px;
+	// min-width: 800px;
     width: 100%;
     height: 100%;
-    background-color: #ffe;
+    background-color: #fff;
     // background-image: url('/static/image/bg.jpg');
     background-size: cover;
 }
@@ -16,6 +17,9 @@ ul{
 }
 input, select, textarea {
     outline: 0;
+}
+.btn{
+	border-radius: 0;
 }
 .btn-standard{
 	padding: 10px 40px;
@@ -55,8 +59,41 @@ input, select, textarea {
 
 /* 覆盖原始组件 */
 .el-table .cell {
-    text-align: center;
+  text-align: center;
+}
+
+.el-popover{
+  word-wrap: break-word;
 }
 /* .el-step__title.is-process{
 	color: #ddd;
 } */
+.el-message-box{
+  .el-message-box__header {
+    padding: 15px 20px 0;
+    background: #eee;
+    height: 52px;
+
+    .el-message-box__close {
+      top: 16px;
+    }
+
+  }
+  .el-message-box__btns {
+    .self-confirm-btn {
+      background: #1d90e6;
+      border-color: #1d90e6;
+      color: #fff;
+    }
+    .self-cancel-btn{
+      background: #fff;
+      border: 1px solid #bfcbd9;
+      color: #1f2d3d;
+      &:hover{
+        color: #20a0ff;
+        border-color: #20a0ff;
+      }
+    }
+  }
+}
+

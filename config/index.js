@@ -3,7 +3,8 @@ var path = require('path')
 
 module.exports = {
   build: {
-    env: require('./prod.env'),
+    // env: require('./prod.env'),
+    env: {NODE_ENV: '"production"'},
     index: path.resolve(__dirname, '../dist/index.html'),
     assetsRoot: path.resolve(__dirname, '../dist'),
     assetsSubDirectory: 'static',
@@ -17,20 +18,37 @@ module.exports = {
     productionGzipExtensions: ['js', 'css']
   },
   dev: {
-    env: require('./dev.env'),
-    port: 8080,
+    // env: require('./dev.env'),
+    env: {NODE_ENV: '"development"'},
+    port: 8081,
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     // proxyTable: {},
     proxyTable: {
-      '/npbd': {
-        target: 'http://172.16.61.168:3000/npbd',
+      '/npcloud-manager-1.0/npcloud': {
+        target: 'http://172.16.61.206:18087/npcloud-manager-1.0/npcloud',
         changeOrigin: true,
         pathRewrite: {
-          '^/npbd': ''
+          '^/npcloud-manager-1.0/npcloud': ''
+        }
+      },
+      '/cms/service': {
+        target: 'http://172.16.61.88:8018/cms/service',
+        changeOrigin: true,
+        pathRewrite: {
+          '^/cms/service': ''
         }
       }
     },
+    /*proxyTable: {
+      '/npcloud-manager-1.0/npcloud': {
+        target: 'http://172.16.61.207:8070/npcloud-manager-1.0/npcloud',
+        changeOrigin: true,
+        pathRewrite: {
+          '^/npcloud-manager-1.0/npcloud': ''
+        }
+      }
+    },*/
     // CSS Sourcemaps off by default because relative paths are "buggy"
     // with this option, according to the CSS-Loader README
     // (https://github.com/webpack/css-loader#sourcemaps)

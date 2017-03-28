@@ -85,13 +85,13 @@
 		<!-- <h2 class="text-center box-title">安装组件</h2> -->
 		<div class="content-pan clearfix">
 			<div class="content" v-for="(item, index) in appList">	
-				<el-checkbox v-model="item.check" class="appCheck">&nbsp;</el-checkbox>
+				<el-checkbox v-model="item.check" class="appCheck" disabled>&nbsp;</el-checkbox>
 				<p class="text-center content-title">{{item.name}}</p>
 				<el-progress class="comp-progress" type="circle" :status="item.status" :percentage="item.percentage"></el-progress>	
 				<div class="bottom-pan">
 					<button class="btn btn-warning btn-log" @click="showLog(item)">日志</button>
-				</div>				
-			</div>			
+				</div>
+			</div>
 		</div>
 
 		<div class="btn-pan">
@@ -122,21 +122,13 @@
 				dialogFormVisible: false, //是否展示日志框
 				nextDisable: false,
 				logContent: '', //日志信息
-				selectedApp: false, //选择了应用
+				selectedApp: true, //选择了应用
 				installSuccess: false,
 				appList: [
 					{
-						name: 'ie6',
+						name: 'CMS',
 						status: '',
-						check: false
-					},{
-						name: 'ie9',
-						status: '',
-						check: false
-					},{
-						name: 'pbd',
-						status: '',
-						check: false
+						check: true
 					}
 				]
 			}

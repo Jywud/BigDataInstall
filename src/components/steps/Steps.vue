@@ -7,7 +7,7 @@
       <el-step title="选择安装组件"></el-step>
       <el-step title="开始安装组件"></el-step>
       <el-step title="组件启动"></el-step>
-      <el-step title="应用安装"></el-step>
+      <!-- <el-step title="应用安装"></el-step> -->
     </el-steps>
 </template>
 <style>

@@ -2,7 +2,7 @@
 	#setNTP{
 		.sub-title{
 			margin: 40px;
-			color: #bbb;
+			color: #5BC0DE;
 		}
 		.list-title{
 			font-size: 15px;
@@ -77,6 +77,11 @@
 		.result-text{
 			color: #000;
 			font-size: 20px;
+			margin: 0 auto;
+			width: 450px;
+			.ntpip{
+				color: blue;
+			}
 		}
 
 	}
@@ -87,7 +92,7 @@
 		<steps :active="3"></steps>
 		<!-- <h2 class="text-center box-title">配置NTP</h2> -->
 		<h4 class="text-center sub-title">注：输入自定义主机ip或者选择已添加主机作为NTP服务器</h4>
-		<p class="result-text text-center">您选择的NTP服务器IP：{{NTPIp}}</p>
+		<div class="result-text">您选择的NTP服务器IP：<span class="ntpip">{{NTPIp}}</span></div>
 		<form class="form-inline selectPan">
 		  <div class="form-group">
 		    <label>输入自定义主机：</label>
@@ -118,35 +123,34 @@
 </template>
 <script>
 	import util from 'common/js/util.js';
+	import {
+	    Loading
+	} from 'element-ui';
 	import Steps from 'components/steps/Steps.vue';
 	export default{
 		name: 'setNTP',
 		components: {Steps},
 		mounted () {
-		    this.NTPIp = this.$root.NTPIp || '';
+			this.NTPIp = util.getSessionData('NTPIp') || '';
+		    this.serverList = util.getSessionData('serverList') || [];
 		    if(this.NTPIp) {
 		    	this.nextDisable = false;
 		    }
 		},
 		watch: {
 			NTPIp (newIP, oldIP){
-				this.$root.NTPIp = newIP;
+				util.setSessionData('NTPIp', newIP);
 				this.nextDisable = newIP? false : true;
 				
 			}
 		},
 		data (){
 			return {
-				NTPIp: this.$root.NTPIp || '',  //设置的ip
+				NTPIp: '',  //设置的ip
 				selfModul: '', //自定义的ip
-				serverList: this.$root.serverList || [],
+				serverList: [],
 				nextDisable: true,
 				showErrorTip: false
-				/*serverList:
-				[{host:"1111",ip:"11.11.11.11",isNTP:false,name:"11",pwd:"11"},
-				 {host:"2222",ip:"22.11.11.11",isNTP:false,name:"11",pwd:"11"},
-				 {host:"3333",ip:"33.11.11.11",isNTP:false,name:"11",pwd:"11"},
-				]*/
 			}
 		},
 		methods: {
@@ -154,31 +158,76 @@
 				if(!util.IP.test(this.selfModul)) {
 					this.showErrorTip = true;
 					return;
-				}
-				this.showErrorTip = false;
-				this.NTPIp = this.selfModul;
-				this.serverList.forEach((ser) => {
-					ser.isNTP = false;
-				});
+				}				
+
+				var loadingInstance = Loading.service({
+	                fullscreen: true,
+	                text: 'NTP配置中,请勿刷新页面...'
+	            });
+
+	            AJAX.add({type:'doNtp', uuid:'doNtp', ip: this.selfModul}).then(res => {
+	                loadingInstance.close();	   
+	                if(res.body.status === 'success') {
+		                this.showErrorTip = false;
+						this.NTPIp = this.selfModul;
+						this.serverList.forEach((ser) => {
+							ser.isNTP = false;
+						});
+
+						util.setSessionData('serverList', this.serverList); 
+					} else {
+						this.$message({
+		                    message: '设置失败，请重试',
+		                    type: 'warning'
+		                });
+					}  
+					         
+	            }, res =>{
+	            	loadingInstance.close();
+	            	this.$message({
+	                    message: '系统异常',
+	                    type: 'warning'
+	                });
+	            });
 			},
-			setNTP (server){
-				this.selfModul = '';
-				this.showErrorTip = false;
-				var curNTPStatus = server.isNTP;
-				this.serverList.forEach((ser) => {
-					ser.isNTP = false;
-				});	
-				server.isNTP = !curNTPStatus;
-				if(server.isNTP === true) {
-					this.NTPIp = server.ip;
-				} else {
-					this.NTPIp = '';
-				}
-				
-				// server.isNTP = !server.isNTP;
+			setNTP (server){				
+
+				var loadingInstance = Loading.service({
+	                fullscreen: true,
+	                text: 'NTP配置中,请勿刷新页面...'
+	            });
+
+	            AJAX.install({type:'doNtp', uuid:'doNtp', ip: server.ip, stype: '1'}).then(res => {
+	                loadingInstance.close();
+	                if(res.body.status === 'success') {
+	                	this.selfModul = '';
+						this.showErrorTip = false;
+						this.serverList.forEach((ser) => {
+							ser.isNTP = false;
+						});	
+
+						server.isNTP = true;
+						this.NTPIp = server.ip;				
+
+						util.setSessionData('serverList', this.serverList);
+	                } else {
+	                	this.$message({
+		                    message: '设置失败，请重试',
+		                    type: 'warning'
+		                });
+	                }
+
+	            }, res =>{
+	            	loadingInstance.close();
+	            	this.$message({
+	                    message: '系统异常',
+	                    type: 'warning'
+	                });
+	            });
+
 			},
 			back (){
-				this.$router.replace('/addServers');
+				this.$router.replace('/configHost');
 			},
 			next (){
 				this.$router.replace('/chooseComponents');
