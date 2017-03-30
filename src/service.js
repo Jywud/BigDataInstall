@@ -100,6 +100,10 @@ window.AJAX = {
   userDelete(req) {
     return Vue.http.post('/npcloud-manager-1.0/npcloud/userDelete', req);
   },
+  //单节点重启
+  restartCom(req) {
+    return Vue.http.post('/npcloud-manager-1.0/npcloud/restart', req);
+  },
 
   //cms
   getServerInfo() {
@@ -113,7 +117,7 @@ window.AJAX = {
   },
   //获取所有cpu的使用信息
   getCPUData(){
-    return Vue.http.get('/npcloud-manager-1.0/npcloud  /getCPUData')
+    return Vue.http.get('/npcloud-manager-1.0/npcloud/getCPUData')
   },
   //获取服务器磁盘信息
   getDiskData(){

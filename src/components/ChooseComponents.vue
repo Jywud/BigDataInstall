@@ -224,6 +224,25 @@ export default {
             });
         });
 
+        //判断之前的cms选择
+        var chooseCMS = util.getSessionData('chooseCMS');
+        if(!!chooseCMS) {
+
+            if(chooseCMS.userName) { //自定义
+                this.cmsSelect = 'self';
+                this.inputIp = chooseCMS.ip;
+                this.inputUserName = chooseCMS.userName;
+                this.inputPassword = chooseCMS.password;
+
+            } else {
+                // this.cmsSelect = 'self';
+                this.cmsSelect = chooseCMS.ip;
+            }
+
+        } else { //没选择
+            this.cmsSelect = 'noSelect';
+        }
+
     },
     data() {
         return {

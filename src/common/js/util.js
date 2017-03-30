@@ -35,7 +35,12 @@ export default{
 	setSessionData (type, data) {
 		sessionStorage.setItem(type, JSON.stringify(data));
 	},
-
+  getLocalData (type) {
+    return JSON.parse(localStorage.getItem(type) || '""');
+  },
+  setLocalData (type, data) {
+    localStorage.setItem(type, JSON.stringify(data));
+  },
   //在固定日期上添加几秒
   addSeconds: function (date, value) {
     date.setSeconds(date.getSeconds() + value);

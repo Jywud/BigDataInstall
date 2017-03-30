@@ -121,13 +121,6 @@
           }
         }, () => {
         });
-
-//        var dom = document.querySelectorAll('.charts');
-//        for (var i = 0; i < dom.length; i++) {
-//          var curId = $(dom[i]).attr("id");
-//          this.myChart[curId] = echarts.init(dom[i]);
-//          this.getOption(curId);
-//        }
       },
       getOptionObj(){
           return {

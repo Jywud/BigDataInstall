@@ -20,6 +20,45 @@
             margin-bottom: 10px;
             margin-right: 10px;
             text-align: center;
+            .com-icon {
+                position: absolute;
+                top: 3px;
+                left: 8px;
+                width: 40px;
+                height: 40px;
+                background-size: 100% 100%;
+            }
+            .ES {
+                background-image: url('/static/image/component/ES.png');
+            }
+            .Hadoop {
+                background-image: url('/static/image/component/Hadoop.png');
+            }
+            .Hive {
+                background-image: url('/static/image/component/Hive.png');
+            }
+            .JDK {
+                background-image: url('/static/image/component/JDK.png');
+            }
+            .Kafka {
+                background-image: url('/static/image/component/Kafka.png');
+            }
+            .NPBase {
+                background-image: url('/static/image/component/NPBase.png');
+            }
+            .Spark {
+                background-image: url('/static/image/component/Spark.png');
+            }
+            .Zookeeper {
+                background-image: url('/static/image/component/Zookeeper.png');
+            }
+            .Opaq {
+                background-image: url('/static/image/component/Opaq.png');
+            }
+            .cms {
+                background-image: url('/static/image/component/cms.png');
+            }
+
             .content-title {
                 font-weight: 800;
                 color: #222;
@@ -46,6 +85,7 @@
         <!-- <h2 class="text-center box-title">安装组件</h2> -->
         <div class="content-pan clearfix">
             <div class="content" v-for="(item, index) in comList">
+                <div class="com-icon" :class="[item.name]"></div>
                 <p class="text-center content-title">{{item.name}}</p>
                 <el-progress class="comp-progress" type="circle" :status="item.status" :percentage="item.percentage"></el-progress>
                 <button class="btn btn-warning btn-log" @click="showLog(item)">日志</button>
@@ -127,7 +167,7 @@ export default {
             clearInterval(this.logInterval);
         },
         getProgress() {
-            
+
             this.nextDisable = true;
             this.progressInterval = null;
             this.progressInterval = setInterval(() => {
@@ -143,7 +183,7 @@ export default {
                             for (var i = 0; i < res.body.progress.length; i++) {
                                 if (server.name === res.body.progress[i].ip) {
                                     server.percentage = res.body.progress[i].value;
-                                    server.status = server.percentage == 100 ? 'success': '';
+                                    server.status = server.percentage == 100 ? 'success' : '';
 
                                 }
                             }
@@ -160,10 +200,10 @@ export default {
                             if (successCount === self.comList.length - 1) {
                                 // self.nextDisable = false;
                                 clearInterval(self.progressInterval);
-                                setTimeout( () =>{
+                                setTimeout(() => {
                                     self.installCMS();
                                 }, 5000);
-                                
+
                                 // self.$message('全部组件安装成功！');
                                 // self.$router.replace('startComponents');
                             }
@@ -172,8 +212,8 @@ export default {
                                 self.nextDisable = false;
                                 clearInterval(self.progressInterval);
                                 self.$message({
-                                  message: '全部组件安装成功！',
-                                  type: 'success'
+                                    message: '全部组件安装成功！',
+                                    type: 'success'
                                 });
                                 self.$router.replace('startComponents');
                             }
@@ -286,13 +326,13 @@ export default {
                                         this.nextDisable = false;
                                         clearInterval(this.cmsInterval);
                                         this.$message({
-                                          message: '全部组件安装成功！',
-                                          type: 'success'
+                                            message: '全部组件安装成功！',
+                                            type: 'success'
                                         });
-                                        setTimeout( () => {
+                                        setTimeout(() => {
                                             this.$router.replace('startComponents');
                                         }, 2000);
-                                        
+
                                     }
 
                                 }
@@ -315,7 +355,7 @@ export default {
         },
         next() {
 
-            this.comList.forEach( data =>{
+            this.comList.forEach(data => {
                 data.percentage = 0;
                 data.status = ''
             });

@@ -19,13 +19,61 @@
             margin-bottom: 10px;
             margin-right: 10px;
             text-align: center;
+            .com-icon {
+                position: absolute;
+                top: 3px;
+                left: 8px;
+                width: 40px;
+                height: 40px;
+                background-size: 100% 100%;
+            }
+            .ES {
+                background-image: url('/static/image/component/ES.png');
+            }
+            .Hadoop {
+                background-image: url('/static/image/component/Hadoop.png');
+            }
+            .Hive {
+                background-image: url('/static/image/component/Hive.png');
+            }
+            .JDK {
+                background-image: url('/static/image/component/JDK.png');
+            }
+            .Kafka {
+                background-image: url('/static/image/component/Kafka.png');
+            }
+            .NPBase {
+                background-image: url('/static/image/component/NPBase.png');
+            }
+            .Spark {
+                background-image: url('/static/image/component/Spark.png');
+            }
+            .Zookeeper {
+                background-image: url('/static/image/component/Zookeeper.png');
+            }
+            .Opaq {
+                background-image: url('/static/image/component/Opaq.png');
+            }
+            .cms {
+                background-image: url('/static/image/component/cms.png');
+            }
+            /* .com-icon{
+                position: absolute;
+                top: 5px;
+                left: 5px;
+                width: 50px;
+                height: 50px;
+                background-size: 100% 100%;
+                background-image: url('/public/image/component/ES.png');
+                
+            } */
             .content-title {
                 font-weight: 800;
                 color: #222;
             }
             .bottom-pan {
                 position: absolute;
-                left: 30px;
+                left: 45px;
                 bottom: 5px;
             }
             .status {
@@ -86,10 +134,11 @@
 </style>
 <template>
     <div id="StartComponents">
-        <steps :active="6"></steps>
+        <steps :active="stepActive"></steps>
         <!-- <h2 class="text-center box-title">安装组件</h2> -->
         <div class="content-pan clearfix">
             <div class="content" v-for="(item, index) in comList">
+                <div class="com-icon" :class="[item.name]"></div>
                 <p class="text-center content-title">{{item.name}}</p>
                 <div class="loader-inner start-loading" v-show="item.status == '启动中...'" :class="{'line-spin-fade-loader': item.status == '启动中...'}">
                     <div></div>
@@ -101,20 +150,15 @@
                     <div></div>
                     <div></div>
                 </div>
-                <!-- <div class="loader-inner start-loading" v-show="item.status == '启动中...'" :class="{'ball-scale-ripple-multiple': item.status == '启动中...'}">
-                    <div></div>
-                    <div></div>
-                    <div></div>
-                </div> -->
                 <div class="start-fail start-icon" v-show="item.status == '启动失败'"></div>
                 <div class="start-success start-icon" v-show="item.status == '启动成功'"></div>
                 <!-- <span :class="{'el-icon-loading': item.status == '启动中...'}"></span> -->
                 <p class="status-text" :style="{color: item.fontColor}">{{item.status}}</p>
-                <button class="btn btn-warning btn-log" @click="showLog(item)">日志</button>
-                <!-- <div class="bottom-pan">
-                    <span class="status" :style="{color: item.fontColor}">{{item.status}}</span>
-                    <button class="btn btn-warning btn-log" @click="showLog(item)">日志</button>
-                </div> -->
+                <!-- <button class="btn btn-warning btn-log" @click="showLog(item)">日志</button> -->
+                <div class="bottom-pan">
+                    <button class="btn btn-primary" @click="restart(item)" disabled="noShowRestart">重启</button>
+                    <button class="btn btn-warning" @click="showLog(item)">日志</button>
+                </div>
             </div>
         </div>
         <div class="btn-pan">
@@ -135,6 +179,7 @@
 <script>
 // import { MessageBox } from 'element-ui';
 var interval = null;
+var simplyInterval = null;
 import util from 'common/js/util.js';
 import Steps from 'components/steps/Steps.vue';
 export default {
@@ -148,7 +193,8 @@ export default {
                     name: data,
                     percentage: 0,
                     status: '等待启动',
-                    fontColor: 'blue'
+                    fontColor: 'blue',
+                    noShowRestart: true
                 });
             }
 
@@ -160,7 +206,8 @@ export default {
                 name: 'cms',
                 percentage: 0,
                 status: '等待启动',
-                fontColor: 'blue'
+                fontColor: 'blue',
+                noShowRestart: true
             });
         }
 
@@ -168,6 +215,7 @@ export default {
     beforeDestroy() {
         clearInterval(interval);
         clearInterval(this.logInterval);
+        clearInterval(simplyInterval);
     },
     data() {
         return {
@@ -177,6 +225,8 @@ export default {
             logInterval: null,
             noSuccess: false, //全部启动成功
             btnTitle: '启动',
+            stepActive: 6,
+            successCount: 0, //存放成功的个数
             comList: []
         }
     },
@@ -218,7 +268,9 @@ export default {
         },
         next() {
             this.comList.forEach(data => {
-                data.status = '启动中...'
+                data.status = '启动中...';
+                data.fontColor = 'blue';
+                data.noShowRestart = true;
             });
             this.nextDisable = true;
 
@@ -229,6 +281,7 @@ export default {
                     AJAX.start({
                         type: 'start'
                     });
+                    this.successCount = 0;
                     this.startprocess();
                 }
 
@@ -242,14 +295,60 @@ export default {
             });
             // this.$router.replace('installApplication');
         },
+        //单个失败节点启动
+        restart(data) {
+            this.nextDisable = true;
+            data.noShowRestart = true;
+
+            //启动单节点
+            AJAX.restartCom({
+                type: 'restart',
+                appType: 'all',
+                app: data.name
+            }).then(res => {
+
+            }, res => {
+
+            });
+
+            //获取单节点进度
+            simplyInterval = setInterval(() => {
+                AJAX.start({
+                    type: 'check',
+                    app: data.name
+                }).then(res => {
+                    if (res.body.status === 'success') {                        
+                        this.successCount++;
+                        data.fontColor = 'green';
+                        data.status = '启动成功';
+
+                        if (this.successCount === this.comList.length) {
+                            clearInterval(simplyInterval);
+                            _self.stepActive = 7;
+                            _self.$message({
+                                message: '所有组件启动成功, 自动跳转监控..',
+                                type: 'success'
+                            });
+                            setTimeout(() => {
+                                _self.$router.replace('/monitor/assembly');
+                            }, 2000);
+                        }
+                    } else if (res.body.status === 'fail') {
+                        data.noShowRestart = false;
+                        data.fontColor = 'red';
+                        data.status = '启动失败';
+                    }
+                });
+            }, 4000);
+
+        },
         successInstall() {
             this.$router.replace('/monitor');
         },
         startprocess() {
-            // interval = null;
             clearInterval(interval);
-
             interval = setInterval(() => {
+                var failCount = 0;
                 var successCount = 0;
                 var noAllOK = false;
                 var _self = this;
@@ -261,50 +360,55 @@ export default {
                             app: data.name
                         }).then(res => {
                             console.log('启动--' + data.name + '--' + res.body.status);
+                            reqCount++;
                             if (res.body.status === 'success') {
                                 data.fontColor = 'green';
                                 data.status = '启动成功';
                                 successCount++;
+                                //所有组件启动成功
+                                if (successCount === _self.comList.length) {
+                                    clearInterval(interval);
+                                    _self.stepActive = 7;
+                                    _self.$message({
+                                        message: '所有组件启动成功, 自动跳转监控..',
+                                        type: 'success'
+                                    });
+                                    // _self.noSuccess = true;
+                                    setTimeout(() => {
+                                        _self.$router.replace('/monitor/assembly');
+                                    }, 2000);
+
+                                }
+
                             } else if (res.body.status === 'fail') {
                                 data.fontColor = 'red';
                                 data.status = '启动失败';
+                                failCount++;
+                                // data.noShowRestart = false;
                                 _self.btnTitle = '重新启动';
-                                // this.$message('组件启动失败，请重试！');
-                                _self.nextDisable = false;
-                                // clearInterval(interval);
+                                // _self.nextDisable = false;
                             }
+
+                            //请求都完成，但是有失败的情况
+                            if (failCount + successCount === _self.comList.length && failCount > 0) {
+                                clearInterval(interval);
+                                _self.successCount = successCount;
+                                _self.nextDisable = false;
+                                _self.comList.forEach(data2 => {
+                                    if (data2.status === '启动失败') {
+                                        data2.noShowRestart = false;
+                                    }
+                                });
+                            }
+
                         }, res => {
                             this.nextDisable = false;
                             clearInterval(interval);
                         });
 
-                        /*if (data.status !== '启动成功') {
-                            noAllOK = true;
-                        }*/
-
                     })(data);
 
                 });
-
-                if (successCount === this.comList.length) {
-                    clearInterval(interval);
-                    this.$message({
-                        message: '所有组件启动成功！',
-                        type: 'success'
-                    });
-                    this.nextDisable = false;
-                    this.noSuccess = true;
-                    this.$router.replace('/monitor');
-                }
-
-                /*if (!noAllOK) {
-                    console.log('所有启动成功');
-                    this.$message('所有组件启动成功！');
-                    this.nextDisable = false;
-                    this.noSuccess = true;
-                    clearInterval(interval);
-                    this.$router.replace('/monitor');
-                }*/
 
             }, 4000);
 

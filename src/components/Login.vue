@@ -94,7 +94,7 @@
 <script>
 // import Service from '../service.js'
 // import {bus} from 'common/js/bus.js'
-// import { Loading } from 'element-ui';
+import { Loading } from 'element-ui';
 // import Test from 'components/Test.vue'
 import util from 'common/js/util.js';
 export default {
@@ -107,13 +107,28 @@ export default {
         AJAX.sys({
             type: 'testUse'
         }).then(data => {
-            // if (data.body.license_status === 'success') {
-                console.log('license_status' + data.body.license_status);
+            // console.log('license_status' + data.body.license_status);
             if (data.body.license_status === 'success') {
+                var loadingInstance = Loading.service({
+                    fullscreen: true,
+                    text: '初始化,请勿刷新页面...'
+                });
+
+                AJAX.init().then(res => {
+                    loadingInstance.close();
+                }, res => {
+                    loadingInstance.close();
+                });
+
                 next();
-                // util.setSessionData('authorize', true);
+
+                util.setSessionData('maxNodes', data.body.maxnodes);
             } else {
                 next(vm => {
+                    vm.$message({
+                        message: data.body.license_status,
+                        type: 'warning'
+                    });
                     vm.$router.replace('/authorize');
                 });
             }
@@ -152,7 +167,7 @@ export default {
         }
     },
     methods: {
-        login() {            
+        login() {
             // this.listArr.push({name: 'dindin'});
             /*var loadingInstance1 = Loading.service({ fullscreen: true , text: '加载中..'});
 

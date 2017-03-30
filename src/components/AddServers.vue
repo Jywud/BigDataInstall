@@ -122,20 +122,8 @@ export default {
         this.nextDisable = serverList && serverList.length > 0 ? false : true;
         this.serverList = serverList || [];
 
-        var loadingInstance = Loading.service({
-            fullscreen: true,
-            text: '初始化,请勿刷新页面...'
-        });
-
-        AJAX.init().then(res => {
-            loadingInstance.close();
-        }, res => {
-            loadingInstance.close();
-            this.$message({
-                message: '系统异常',
-                type: 'warning'
-            });
-        });
+        this.maxNodes = util.getSessionData('maxNodes') || 0;
+        
     },
     beforeRouteEnter(to, from, next) {
         console.log(from.path);
@@ -153,7 +141,8 @@ export default {
             isShowBox: false, //是否展示添加服务器面板
             isShowEditBox: false,
             nextDisable: true,
-            serverList: []
+            serverList: [],
+            maxNodes: 0
         }
     },
     watch: {
@@ -263,6 +252,15 @@ export default {
                         return;
                     }
 
+                    //判断最大可添加节点
+                    if (this.maxNodes <= this.serverList.length) {
+                        this.$message({
+                            message: '最大可添加节点数为：' + this.maxNodes,
+                            type: 'warning'
+                        });
+                        return;
+                    }
+
                     this.serverList.push({
                         ip: this.inputIp,
                         name: this.inputUserName,
@@ -286,6 +284,14 @@ export default {
                         if (this.checkSameIPs(ipHead + i)) { //判断重复
                             continue;
                         } else {
+
+                            if (this.maxNodes <= this.serverList.length) {
+                                this.$message({
+                                    message: '最大可添加节点数为：' + this.maxNodes,
+                                    type: 'warning'
+                                });
+                                break;
+                            }
                             this.serverList.push({
                                 ip: ipHead + i,
                                 name: this.inputUserName,
@@ -314,7 +320,18 @@ export default {
 
         },
         deleteServer(index) {
-            this.serverList.splice(index, 1);
+            this.$msgbox({
+                title: '提示',
+                message: '确定删除？',
+                showCancelButton: true,
+                confirmButtonText: '确定',
+                cancelButtonText: '取消'
+            }).then(action => {
+                if (action === 'confirm') {
+                    this.serverList.splice(index, 1);
+                }
+            });
+            
         },
         addAjax(reqList) {
             let loadingInstance = Loading.service({
@@ -387,7 +404,7 @@ export default {
                         if (ajaxNum === reqList.length) {
                             loadingInstance.close();
                             if (!stopAdd) {
-                                console.log('--addAjax--');
+                                // console.log('--addAjax--');
                                 self.addAjax(reqList);
                             }
                         }

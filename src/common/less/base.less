@@ -1,99 +1,113 @@
 /*自定义*/
-html, body{
-	font-family: "Microsoft YaHei";
-	height: 100%;
-	min-width: 800px;
+
+html,
+body {
+    font-family: "Microsoft YaHei";
+    height: 100%;
+    min-width: 800px;
 }
-body{
-	// min-width: 800px;
+
+body {
+    // min-width: 800px;
     width: 100%;
     height: 100%;
     background-color: #fff;
     // background-image: url('/static/image/bg.jpg');
     background-size: cover;
 }
-ul{
-	list-style: none;
+
+ul {
+    list-style: none;
 }
-input, select, textarea {
+
+input,
+select,
+textarea {
     outline: 0;
 }
-.btn{
-	border-radius: 0;
+
+.btn {
+    border-radius: 0;
 }
-.btn-standard{
-	padding: 10px 40px;
+
+.btn-standard {
+    padding: 10px 40px;
 }
-.pointer{
-	cursor: pointer;
+
+.pointer {
+    cursor: pointer;
 }
-.box-title{
-	color: #fff;
+
+.box-title {
+    color: #fff;
 }
-.step-box{
-	text-align: center;
-	margin-top: 20px;
-	margin-bottom: 20px;
+
+.step-box {
+    text-align: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
 }
-.mb10{
-	margin-bottom: 10px;
+
+.mb10 {
+    margin-bottom: 10px;
 }
-.mb30{
-	margin-bottom: 30px;
+
+.mb30 {
+    margin-bottom: 30px;
 }
-.ml10{
-	margin-left: 10px;
+
+.ml10 {
+    margin-left: 10px;
 }
-.ml30{
-	margin-left: 30px;
+
+.ml30 {
+    margin-left: 30px;
 }
-.ml40{
-	margin-left: 40px;
+
+.ml40 {
+    margin-left: 40px;
 }
-.mt100{
-	margin-top: 100px;
+
+.mt100 {
+    margin-top: 100px;
 }
-.mt200{
-	margin-top: 200px;
+
+.mt200 {
+    margin-top: 200px;
 }
+
 
 /* 覆盖原始组件 */
+
 .el-table .cell {
-  text-align: center;
+    text-align: center;
 }
 
-.el-popover{
-  word-wrap: break-word;
+.el-popover {
+    word-wrap: break-word;
 }
+
+
 /* .el-step__title.is-process{
-	color: #ddd;
+  color: #ddd;
 } */
-.el-message-box{
-  .el-message-box__header {
-    padding: 15px 20px 0;
-    background: #eee;
-    height: 52px;
 
-    .el-message-box__close {
-      top: 16px;
+.el-message-box {
+    .el-message-box__header {
+        padding: 15px 20px 0;
+        background: #eee;
+        height: 52px;
+        .el-message-box__close {
+            top: 16px;
+        }
     }
-
-  }
-  .el-message-box__btns {
-    .self-confirm-btn {
-      background: #1d90e6;
-      border-color: #1d90e6;
-      color: #fff;
+    .el-message-box__btns {
+        .el-button:first-child {
+            margin-left: 8px;
+            float: right;
+        }
     }
-    .self-cancel-btn{
-      background: #fff;
-      border: 1px solid #bfcbd9;
-      color: #1f2d3d;
-      &:hover{
-        color: #20a0ff;
-        border-color: #20a0ff;
-      }
-    }
-  }
 }
-
+.el-message{
+  -webkit-transform:translateX(-50%);
+}

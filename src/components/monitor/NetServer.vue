@@ -2,7 +2,7 @@
   <div id="netServer">
     <ul class="clearfix line-chart">
       <li class="section" v-for="net in serverList" on-finish-render-filters>
-        <span class="yName">单位:(%)</span>
+        <span class="yName">单位:(ms)</span>
         <!--<ul class="legend-wrap">-->
         <!--<li class="legend-item rect-0">-->
         <!--<span class="legend-text">CPU使用</span>-->
@@ -132,7 +132,7 @@
           netObj.title.text = data.serverIP;
           netObj.xAxis.data = this.getTimeList();
           this.chartAllData[data.serverIP].shift();
-          this.chartAllData[data.serverIP].push(data.networkInfo.netdelay * 100);
+          this.chartAllData[data.serverIP].push(Number(data.networkInfo.netdelay).toFixed(4));
           netObj.series[0].data = this.chartAllData[data.serverIP];
 
           _self.echartsObj[data.serverIP].setOption(netObj);
@@ -173,7 +173,7 @@
                 width: 1
               }
             },
-            formatter: "{b} <br/>网络使用率: {c}%"
+            formatter: "{b} <br/>网络连接时间: {c}ms"
 
           },
 
@@ -211,7 +211,7 @@
             splitLine: {
               lineStyle: {}
             },
-            max: 100
+            // max: 1
           },
           series: [
             {

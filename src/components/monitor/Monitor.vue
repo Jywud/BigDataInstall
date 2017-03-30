@@ -1,27 +1,13 @@
 <template>
     <div id="monitor">
         <nav>
-            <!--class="navbar navbar-default">-->
-            <!--<div class="container-fluid">-->
-            <!-- Brand and toggle get grouped for better mobile display -->
-            <!--<div class="navbar-header">-->
-            <!--<button type="button" class="navbar-toggle collapsed" data-toggle="collapse"-->
-            <!--data-target="#bs-example-navbar-collapse-1" aria-expanded="false">-->
-            <!--<span class="sr-only">Toggle navigation</span>-->
-            <!--<span class="icon-bar"></span>-->
-            <!--<span class="icon-bar"></span>-->
-            <!--<span class="icon-bar"></span>-->
-            <!--</button>-->
-            <!--<div class="navbar-brand">Brand</div>-->
-            <!--</div>-->
-            <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <div class="nav navbar-nav">
                     <span class="icon-logo"></span>
-                    <span class="icon-text">大数据基础平台</span>
+                    <span class="icon-text">大数据基础管理平台</span>
                     <router-link to="/monitor/assembly" class="hover nav-item">组件监控</router-link>
                     <router-link to="/monitor/server" class="hover nav-item">服务器监控</router-link>
-                    <router-link to="/monitor/serverinfo" class="hover nav-item">服务信息</router-link>
+                    <router-link to="/monitor/serverinfo" class="hover nav-item" v-if="isCms">服务信息</router-link>
                     <router-link to="/monitor/platform" class="hover nav-item" v-if="isAdmin">用户管理</router-link>
                 </div>
                 <div class="nav navbar-nav navbar-right">
@@ -62,7 +48,6 @@
             <div slot="footer" class="dialog-footer">
                 <el-button type="primary" @click="commit()">确 定</el-button>
                 <el-button @click="dialogFormVisible=false">取 消</el-button>
-
             </div>
         </el-dialog>
         <router-view></router-view>
@@ -143,6 +128,14 @@
     }
     .el-dialog--small {
         width: 450px;
+        .el-dialog__header {
+            padding: 15px 20px 0;
+            background: #eee;
+            height: 48px;
+            .el-message__close {
+                top: 16px;
+            }
+        }
         .el-dialog__title {
             color: #999;
         }
@@ -159,7 +152,6 @@
             min-width: 174px;
             height: 30px;
             border-radius: 4px;
-            /*background-color: transparent;*/
             color: #333;
             box-shadow: none;
             font-size: 12px;
@@ -172,23 +164,18 @@ import util from 'common/js/util.js';
 import Service from '../../service.js';
 export default {
     mounted: function() {
-        console.log('--mon---');
-        /*AJAX.sysMonitorInit().then(res=>{
-            let dataList=res.body.data.serviceNames;
-            util.setLocalData('monitor',dataList);
-        },res=>{
-          this.$message({
-            message: '系统异常',
-            type: 'warning'
-          });
-        });
         this.userInfo = util.getSessionData('userInfo');
-        if (!!this.userInfo.isAdmin ) {
+        if (!!this.userInfo.isAdmin) {
             this.isAdmin = true;
-        }else{
-          this.isAdmin = false;
-        }*/
-//        this.$router.replace('/monitor/assembly');
+        } else {
+            this.isAdmin = false;
+        };
+        if (!!this.userInfo.CMS) {
+            this.isCms = true;
+        } else {
+            this.isCms = false;
+        };
+        //        this.$router.replace('/monitor/assembly');
     },
     data() {
         return {
@@ -212,36 +199,35 @@ export default {
             showErrorTip1: false,
             showErrorTip2: false,
             isAdmin: false,
-            userInfo: {}
+            userInfo: {},
+            isCms: false
 
         };
     },
     methods: {
         logOut() {
             this.$confirm('确定要退出【大数据基础管理平台】吗?', '提示', {
-                cancelButtonText: '确定',
-                confirmButtonText: '取消',
+                cancelButtonText: '取消',
+                confirmButtonText: '确定',
                 type: 'warning',
-                cancelButtonClass:'self-confirm-btn',
-                confirmButtonClass:'self-cancel-btn'
             }).then((a) => {
-//
+                var req = {
+                    id: this.userInfo.id
+                };
+                AJAX.logout(req).then(data => {
+                    if (data.body.status === 'success') {
+                        util.setSessionData('userInfo', null);
+                        this.$router.replace('/login');
+                    }
+                }, () => {
+                    this.$message({
+                        message: '系统异常',
+                        type: 'warning'
+                    });
+                });
 
             }).catch(() => {
-              var req={
-                name: this.userInfo.userName
-              };
-              AJAX.logout(req).then( data =>{
-                if(data.body.status==='success'){
-                  util.setSessionData('userInfo',null);
-                  this.$router.replace('/login');
-                }
-              }, () => {
-                this.$message({
-                  message: '系统异常',
-                  type: 'warning'
-                });
-              });
+
             });
         },
         serverAssnbly(index) {
@@ -265,11 +251,6 @@ export default {
             this.showErrorTip = false;
             this.showErrorTip1 = false;
             this.showErrorTip2 = false;
-            //        if (this.form.oldPwd === '') {
-            //          this.notice = '原密码不能为空';
-            //          this.showErrorTip = true;
-            //          return;
-            //        }
             if (this.form.newPwd === '') {
                 this.showErrorTip1 = true;
                 this.notice1 = '新密码不能为空';
@@ -285,28 +266,28 @@ export default {
                 this.notice2 = '新密码与确认密码不一致';
                 return;
             }
-          let req={
-            id:this.userInfo.id,
-            password:this.form.newPwd
-          };
-          AJAX.changePasswd(req).then( data =>{
-            if(data.body.status==='success'){
-              this.$message({
-                message: '修改成功',
-                type: 'success'
-              });
-              this.dialogFormVisible = false;
-              this.form.newPwd='';
-              this.form.confirmPwd='';
-            }
-          }, () => {
-            this.$message({
-              message: '系统异常',
-              type: 'warning'
+            let req = {
+                id: this.userInfo.id,
+                password: this.form.newPwd
+            };
+            AJAX.changePasswd(req).then(data => {
+                if (data.body.status === 'success') {
+                    this.$message({
+                        message: '修改成功',
+                        type: 'success'
+                    });
+                    this.dialogFormVisible = false;
+                    this.form.newPwd = '';
+                    this.form.confirmPwd = '';
+                }
+            }, () => {
+                this.$message({
+                    message: '系统异常',
+                    type: 'warning'
+                });
             });
-          });
         }
-        }
+    }
 
 }
 </script>
