@@ -4,20 +4,14 @@
         <h4 class="text-center title-text">暂未获得授权或授权无效</h4>
         <div class="content-box">
             <div class="con-pan download-pan">
-                <!-- <h5>第一步：</h5> -->
                 <p class="sub-text">请先下载授权原文件,授权后再上传！</p>
                 <div class="btn btn-success btn-download" @click="download">下载授权原文件</div>
-                <!-- <a class="btn btn-success btn-download" href="/npcloud-manager-1.0/npcloud/download?type=key0" target="_blank">下载授权原文件</a> -->
             </div>
             <div class="upload-pan">
-                <!-- <h5>第二步：</h5> -->
-                <!-- <form action="/npcloud-manager-1.0/npcloud/fileUpload" method="post" enctype="multipart/form-data">                    
-                    <input type="file" name="fileparam">
-                    <button type="submit">上传</button>
-                </form> -->
                 <el-upload class="upload-file" action="/npcloud-manager-1.0/npcloud/fileUpload" type="drag" :on-success="handleSuccess" :on-error="handleError" :default-file-list="fileList">
                     <i class="el-icon-upload"></i>
-                    <div class="el-dragger__text">将授权后的文件拖到此处，或<em>点击上传</em></div>
+                    <div class="el-dragger__text">将授权后的文件拖到此处，或<em>点击上传</em>
+                    </div>
                 </el-upload>
             </div>
         </div>
@@ -75,11 +69,6 @@ export default {
             download() {
                 // window.open('/npcloud-manager-1.0/npcloud/download?type=key0');
                 window.location.href = "/npcloud-manager-1.0/npcloud/download?type=key0";
-                /*AJAX.download({type: 'key0'}).then(data => {
-
-                }, data => {
-
-                })*/
             },
             handleSuccess(res) {
                 if (res.status === 'success') {
@@ -90,13 +79,6 @@ export default {
                         type: 'warning'
                     });
                 }
-                /*this.$message({
-                    message: '授权成功',
-                    type: 'success'
-                });
-                setTimeout(() => {
-                    this.$router.replace('/login');
-                }, 2000);*/
 
             },
             handleError(res) {

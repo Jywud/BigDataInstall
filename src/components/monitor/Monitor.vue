@@ -15,20 +15,6 @@
                     <div class="logOut hover" @click="logOut">退出</div>
                 </div>
             </div>
-            <!--<ul class="nav navbar-nav">
-        <li class="hover" :class="isSelected === 0 ? 'active' : ''"><a @click="serverAssnbly(0)">组件监控</a></li>
-        <li class="hover" :class="isSelected === 1 ? 'active' : ''"><a @click="serverAssnbly(1)">服务器监控</a></li>
-        <li class="hover" :class="isSelected === 2 ? 'active' : ''"><a @click="serverAssnbly(2)">用户管理</a></li>
-      </ul>-->
-            <!--<ul class="nav navbar-nav navbar-right">-->
-            <!--<li>-->
-            <!--<div class="touxiang-icon hover" @click="dialogFormVisible = true"><img src="static/image/user-man.png"/>-->
-            <!--</div>-->
-            <!--</li>-->
-            <!--<li><a @click="logOut">退出</a></li>-->
-            <!--</ul>-->
-            <!--</div>-->
-            <!--</div>-->
         </nav>
         <el-dialog title="修改密码" v-model="dialogFormVisible" @close="close">
             <el-form :model="form">
@@ -246,6 +232,8 @@ export default {
             this.showErrorTip1 = false;
             this.showErrorTip2 = false;
             this.dialogFormVisible = false;
+            this.form.newPwd = '';
+            this.form.confirmPwd = '';
         },
         commit() {
             this.showErrorTip = false;

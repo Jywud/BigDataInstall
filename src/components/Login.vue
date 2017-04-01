@@ -109,6 +109,8 @@ export default {
         }).then(data => {
             // console.log('license_status' + data.body.license_status);
             if (data.body.license_status === 'success') {
+                util.setSessionData('maxNodes', data.body.maxnodes);
+
                 var loadingInstance = Loading.service({
                     fullscreen: true,
                     text: '初始化,请勿刷新页面...'
@@ -121,8 +123,7 @@ export default {
                 });
 
                 next();
-
-                util.setSessionData('maxNodes', data.body.maxnodes);
+                
             } else {
                 next(vm => {
                     vm.$message({

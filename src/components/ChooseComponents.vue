@@ -226,9 +226,9 @@ export default {
 
         //判断之前的cms选择
         var chooseCMS = util.getSessionData('chooseCMS');
-        if(!!chooseCMS) {
+        if (!!chooseCMS) {
 
-            if(chooseCMS.userName) { //自定义
+            if (chooseCMS.userName) { //自定义
                 this.cmsSelect = 'self';
                 this.inputIp = chooseCMS.ip;
                 this.inputUserName = chooseCMS.userName;
@@ -337,6 +337,23 @@ export default {
                 this.showmainPan = false;
                 this.defaultSelect = false;
             } else {
+                this.tableData.forEach(data => {
+                    data.jdk = true;
+                    data.zookeeper = true;
+                    data.kafka = true;
+                    data.dataNode = true;
+                    data.worker = true;
+                    data.hRegion = true;
+                    data.es = true;
+                    data.hive = true;
+                    data.mysql = true;
+                });
+                this.mainServer = 0;
+                this.opaq = 0; //单选
+                this.hadoopNameNode = 0; //单选
+                this.sparkMaster = 0; //单选
+                this.hMaster = 0; //单选
+
                 this.showmainPan = true;
                 this.defaultSelect = true;
             }

@@ -148,7 +148,7 @@
 import {
     Loading
 } from 'element-ui';
-
+import util from 'common/js/util.js';
 export default {
     mounted() {
             AJAX.getServerInfo().then(res => {
@@ -216,7 +216,14 @@ export default {
                 obj.port = this.baseAddObj.port;
                 obj.userName = this.baseAddObj.userName;
                 obj.password = this.baseAddObj.password;
-
+                if (!util.IP.test(obj.ip)) {
+                    loadingInstance.close();
+                    this.$message({
+                        message: 'ip不合法',
+                        type: 'warning'
+                    });
+                    return; 
+                }
                 AJAX.register({
                     data: JSON.stringify(obj)
                 }).then(res => {

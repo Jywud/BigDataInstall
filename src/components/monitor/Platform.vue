@@ -211,13 +211,13 @@ export default {
                             type: 'success'
                         });
                     }
+                     this.getUserList();
                 }, () => {
                     this.$message({
                         message: '删除失败',
                         type: 'warning'
                     });
                 });
-                this.getUserList();
             }).catch(() => {});
 
         },
@@ -247,6 +247,7 @@ export default {
                 this.notice1 = '新密码与确认密码不一致';
                 return;
             }
+            debugger;
             let req = {
                 id: this.userId,
                 password: this.form.newPwd

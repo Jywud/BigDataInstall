@@ -156,7 +156,7 @@
                 <p class="status-text" :style="{color: item.fontColor}">{{item.status}}</p>
                 <!-- <button class="btn btn-warning btn-log" @click="showLog(item)">日志</button> -->
                 <div class="bottom-pan">
-                    <button class="btn btn-primary" @click="restart(item)" disabled="noShowRestart">重启</button>
+                    <button class="btn btn-primary" @click="restart(item)" :disabled="item.noShowRestart">重启</button>
                     <button class="btn btn-warning" @click="showLog(item)">日志</button>
                 </div>
             </div>
@@ -166,7 +166,7 @@
                 <span class="glyphicon glyphicon glyphicon-play" aria-hidden="true"></span>&nbsp;{{btnTitle}}
             </button>
             <button class="btn btn-success btn-standard" v-show="noSuccess" @click="successInstall">
-                <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>&nbsp;安装完成
+                <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>&nbsp;跳过
             </button>
         </div>
         <el-dialog title="日志信息" v-model="dialogFormVisible" @close="closeLog">
@@ -299,6 +299,8 @@ export default {
         restart(data) {
             this.nextDisable = true;
             data.noShowRestart = true;
+            data.fontColor = 'blue';
+            data.status = '启动中...';
 
             //启动单节点
             AJAX.restartCom({
@@ -324,26 +326,29 @@ export default {
 
                         if (this.successCount === this.comList.length) {
                             clearInterval(simplyInterval);
-                            _self.stepActive = 7;
-                            _self.$message({
+                            this.stepActive = 7;
+                            this.$message({
                                 message: '所有组件启动成功, 自动跳转监控..',
                                 type: 'success'
                             });
                             setTimeout(() => {
-                                _self.$router.replace('/monitor/assembly');
+                                this.$router.replace('/monitor/assembly');
                             }, 2000);
                         }
                     } else if (res.body.status === 'fail') {
+                        clearInterval(simplyInterval);
                         data.noShowRestart = false;
                         data.fontColor = 'red';
                         data.status = '启动失败';
+
+                        this.nextDisable = false;
                     }
                 });
             }, 4000);
 
         },
         successInstall() {
-            this.$router.replace('/monitor');
+            this.$router.replace('/monitor/assembly');
         },
         startprocess() {
             clearInterval(interval);
@@ -360,7 +365,7 @@ export default {
                             app: data.name
                         }).then(res => {
                             console.log('启动--' + data.name + '--' + res.body.status);
-                            reqCount++;
+                            // reqCount++;
                             if (res.body.status === 'success') {
                                 data.fontColor = 'green';
                                 data.status = '启动成功';
@@ -392,8 +397,10 @@ export default {
                             //请求都完成，但是有失败的情况
                             if (failCount + successCount === _self.comList.length && failCount > 0) {
                                 clearInterval(interval);
+                                _self.noSuccess  = true;
                                 _self.successCount = successCount;
                                 _self.nextDisable = false;
+                                console.log(_self.comList);
                                 _self.comList.forEach(data2 => {
                                     if (data2.status === '启动失败') {
                                         data2.noShowRestart = false;

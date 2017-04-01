@@ -8,7 +8,7 @@
                 <div class="form-group">
                     <div class="input-group">
                         <div class="input-group-addon">IP</div>
-                        <input type="text" class="form-control" v-model="inputIp" placeholder="ip">
+                        <input type="text" class="form-control" v-model="inputIp" placeholder="请输入ip">
                     </div>
                 </div>
                 <div class="form-group">
@@ -20,13 +20,13 @@
                 <div class="form-group">
                     <div class="input-group">
                         <div class="input-group-addon">密码</div>
-                        <input type="password" class="form-control" v-model="inputPassword" placeholder="密码">
+                        <input type="password" class="form-control" v-model="inputPassword" placeholder="请输入密码">
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="input-group">
                         <div class="input-group-addon">主机名前缀</div>
-                        <input type="text" class="form-control" v-model="inputHostName" placeholder="主机名前缀">
+                        <input type="text" class="form-control" v-model="inputHostName" placeholder="请输入主机名前缀">
                     </div>
                 </div>
                 <div class="btn btn-success" @click="addServer"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>&nbsp;添加</div>
@@ -36,17 +36,17 @@
                 </el-table-column>
                 <el-table-column prop="name" label="用户名">
                     <template scope="scope">
-                        <input type="text" class="form-control" v-model="scope.row.name" placeholder="用户名">
+                        <input type="text" class="form-control" v-model="scope.row.name" placeholder="只支持'root'">
                     </template>
                 </el-table-column>
                 <el-table-column prop="pwd" label="密码">
                     <template scope="scope">
-                        <input type="password" class="form-control" v-model="scope.row.pwd" placeholder="密码">
+                        <input type="password" class="form-control" v-model="scope.row.pwd" placeholder="请输入密码">
                     </template>
                 </el-table-column>
                 <el-table-column prop="host" label="主机名">
                     <template scope="scope">
-                        <input type="text" class="form-control" v-model="scope.row.host" placeholder="主机名">
+                        <input type="text" class="form-control" v-model="scope.row.host" placeholder="请输入主机名">
                     </template>
                 </el-table-column>
                 <el-table-column prop="info" :renderHeader="deleteIcon" width="250">
@@ -131,10 +131,10 @@ export default {
     },
     data() {
         return {
-            inputIp: '172.16.61.[196-198]',
-            inputUserName: 'root',
-            inputPassword: '123456',
-            inputHostName: 'node',
+            inputIp: '',
+            inputUserName: '',
+            inputPassword: '',
+            inputHostName: '',
             ipError: false,
             nameError: false,
             pwdError: false,

@@ -26,14 +26,14 @@ module.exports = {
     // proxyTable: {},
     proxyTable: {
       '/npcloud-manager-1.0/npcloud': {
-        target: 'http://172.16.61.206:18087/npcloud-manager-1.0/npcloud',
+        target: 'http://172.16.61.188:18087/npcloud-manager-1.0/npcloud',
         changeOrigin: true,
         pathRewrite: {
           '^/npcloud-manager-1.0/npcloud': ''
         }
       },
       '/cms/service': {
-        target: 'http://172.16.61.88:8018/cms/service',
+        target: 'http://172.16.61.223:8018/cms/service',
         changeOrigin: true,
         pathRewrite: {
           '^/cms/service': ''

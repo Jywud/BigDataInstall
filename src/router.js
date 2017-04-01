@@ -35,10 +35,6 @@ const routes = [
     { path: '/', redirect: '/login' }, {
         path: '/login',
         component: Login
-            /*,children: [{
-                path: 'test',
-                component: Test
-            }]*/
     },
     { path: '/authorize', component: Authorize },
     { path: '/addServers', component: AddServers },
@@ -48,8 +44,7 @@ const routes = [
     { path: '/chooseComponents', component: ChooseComponents },
     { path: '/installComponents', component: InstallComponents },
     { path: '/startComponents', component: StartComponents },
-    { path: '/installApplication', component: InstallApplication },
-    {
+    { path: '/installApplication', component: InstallApplication }, {
         path: '/monitor',
         component: Monitor,
         children: [{

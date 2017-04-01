@@ -10,9 +10,9 @@
                         <span class="text-ips" :id="ip" @click="skip(ip,item.name)">{{ip.ip}}<!-- <span v-if="!!ip.master">(主)</span>
                         <span v-if="!ip.master">(从)</span> --></span>
                     </div>
-                    <div class="failNode box" v-for="fail in item.failIp">
+                    <div class="failNode box" v-for="ip in item.failIp">
                         <i class="icon"></i>
-                        <span class="text-ips" :id="fail">{{fail.ip}}</span>
+                        <span class="text-ips" :id="ip">{{ip}}</span>
                     </div>
                 </div>
                 <div class="bottom-pan">
